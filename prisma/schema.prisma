@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Word {
+  id          Int      @id @default(autoincrement())
+  en          String
+  fr          String
+  category    Int      @default(1) // 1, 2, 3
+  definition  String?
+  img         Bytes?   // Image = donnée binaire.
+}
+
+model Level {
+  id        Int      @id @default(autoincrement())
+  level     Int      @default(1) // 1, 2, 3
+  users     User[]   @relation("UserLevel") // Relation avec User
+}
+
+model User {
+  id              Int @id @default(autoincrement())
+  name            String
+  username        String 
+  pwd             String
+  levelId         Int    // Clé étrangère pointant vers Level
+  level    Level  @relation("UserLevel", fields: [levelId], references: [id]) // Relation avec Level
+  role            String
+}
+
+model Dragon {
+  id  Int @id @default(autoincrement())
+  name String
+}
