@@ -18,6 +18,7 @@ model Word {
   category    Int      @default(1) // 1, 2, 3
   definition  String?
   img         Bytes?   // Image = donnée binaire.
+  theme       String?
 }
 
 model User {

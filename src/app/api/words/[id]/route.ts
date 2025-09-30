@@ -30,7 +30,7 @@ export const GET = async (_req: Request, { params }: { params: { id: string } })
 //
 export const PUT = async (req: Request, { params }: { params: { id: string } }) => {
   try {
-    const { en, fr, category, definition, img } = await req.json();
+    const { en, fr, category, definition, img, theme } = await req.json();
 
     const updatedWord = await prisma.word.update({
       where: { id: Number(params.id) },
@@ -40,6 +40,7 @@ export const PUT = async (req: Request, { params }: { params: { id: string } }) 
         category,
         definition,
         img: img ? Buffer.from(img, "base64") : undefined,
+        theme,
       },
     });
 

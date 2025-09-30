@@ -10,6 +10,7 @@ export default function WordManager() {
     category: 1,
     definition: "",
     img: "",
+    theme: "",
   });
 
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function WordManager() {
 
     if (res.ok) {
       setWords((prev) => [...prev, data.word]);
-      setNewWord({ en: "", fr: "", category: 1, definition: "", img: "" });
+      setNewWord({ en: "", fr: "", category: 1, definition: "", img: "", theme: "" });
     } else {
       alert(data.msg);
     }
@@ -117,6 +118,15 @@ export default function WordManager() {
           accept="image/*"
           onChange={handleImageChange}
           className="w-full"
+        />
+
+        <input
+          type="text"
+          placeholder="Theme"
+          value={newWord.theme}
+          onChange={(e) => setNewWord({ ...newWord, theme: e.target.value })}
+          className="border p-2 w-full"
+          required
         />
 
         <button

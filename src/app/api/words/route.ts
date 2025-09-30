@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 export const GET = async () => {
   try {
     const words = await prisma.word.findMany();
-    return NextResponse.json({ words: words || [] }); // if no words in the database, retrurn empty array to dodge parsing error
+    return NextResponse.json({ words: words || [] }); // if no words in the database yet, retrurn empty array to dodge parsing error
   } catch (error: any) {
     return NextResponse.json(
       { msg: "Failed to retrieve words", error: error.message },
@@ -23,7 +23,7 @@ export const GET = async () => {
 //
 export const POST = async (req: Request) => {
   try {
-    const { en, fr, category, definition, img } = await req.json();
+    const { en, fr, category, definition, img , theme} = await req.json();
 
     if (!en || !fr) {
       return NextResponse.json(
@@ -39,6 +39,7 @@ export const POST = async (req: Request) => {
         category: category ?? 1,
         definition,
         img: img ? Buffer.from(img, "base64") : undefined, // image en base64
+        theme,
       },
     });
 
