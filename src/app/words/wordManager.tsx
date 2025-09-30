@@ -18,7 +18,17 @@ export default function WordManager() {
       .then((data) => setWords(data.words));
   }, []);
 
-  // Convertir l'image en base64
+  // === Supprimer un mot ===
+  const deleteWord = async (id: number) => {
+    const res = await fetch(`/api/words/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      setWords((prev) => prev.filter((w) => w.id !== id));
+    } else {
+      alert("Failed to delete word");
+    }
+  };
+
+  // === Convertir l'image en base64 ===
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -33,6 +43,7 @@ export default function WordManager() {
     reader.readAsDataURL(file);
   };
 
+  // === Ajouter un mot ===
   const addWord = async () => {
     if (!newWord.en || !newWord.fr || !newWord.definition) {
       alert("Please fill all required fields");
@@ -119,19 +130,30 @@ export default function WordManager() {
       {/* liste des mots */}
       <ul className="space-y-2">
         {words.map((w) => (
-          <li key={w.id} className="border p-2 rounded flex justify-between">
+          <li
+            key={w.id}
+            className="border p-2 rounded flex justify-between items-center"
+          >
             <span>
               <strong>{w.en}</strong> → {w.fr} ({w.category})  
               <br />
               <em>{w.definition}</em>
             </span>
-            {w.img && (
-              <img
-                src={`data:image/png;base64,${w.img}`}
-                alt="word"
-                className="w-12 h-12 object-cover ml-4"
-              />
-            )}
+            <div className="flex items-center gap-2">
+              {w.img && (
+                <img
+                  src={`data:image/png;base64,${w.img}`}
+                  alt="word"
+                  className="w-12 h-12 object-cover"
+                />
+              )}
+              <button
+                onClick={() => deleteWord(w.id)}
+                className="bg-red-500 text-white px-2 py-1 rounded"
+              >
+                🗑
+              </button>
+            </div>
           </li>
         ))}
       </ul>

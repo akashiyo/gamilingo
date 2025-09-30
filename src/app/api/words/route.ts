@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 export const GET = async () => {
   try {
     const words = await prisma.word.findMany();
-    return NextResponse.json({ words });
+    return NextResponse.json({ words: words || [] }); // if no words in the database, retrurn empty array to dodge parsing error
   } catch (error: any) {
     return NextResponse.json(
       { msg: "Failed to retrieve words", error: error.message },

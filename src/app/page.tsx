@@ -1,16 +1,27 @@
+'use client'
+
 import Image from "next/image";
+import React from "react";
+import Head from 'next/head';
+import MyForm from './components/admin-form';
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-        <h1> Homepage </h1>
+    <div className="font-sans items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+      <h1 className="text-2xl font-bold"> Homepage </h1>
+      <main>
+        <div>
+          <Head>
+            <title>My Next.js Form</title>
+            <meta name="description" content="A simple form in Next.js" />
+          </Head>
           <main>
-            
+            <h1>Welcome to My Form</h1>
+            <MyForm />
           </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <h2> Footer </h2>
-        <div> <a href="/"> Conditions générales de vente </a></div>
-        <div> <a href="/"> Politique de confidentialité </a></div>
+        </div>
+      </main>
+      <footer className="">
       </footer>
     </div>
   );
