@@ -1,4 +1,4 @@
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
@@ -9,7 +9,15 @@ const prisma = new PrismaClient();
 export const GET = async () => {
   try {
     const words = await prisma.word.findMany();
-    return NextResponse.json({ words: words || [] }); // if no words in the database yet, retrurn empty array to dodge parsing error
+
+    // convert image Buffer to base64 so the client can display it
+    const serialized = words.map((w) => ({
+      ...w,
+      img: w.img ? Buffer.from(w.img).toString("base64") : null,
+    }));
+
+    // return serialized words (with base64 images) to the client
+    return NextResponse.json({ words: serialized || [] }); // if no words in the database yet, return empty array
   } catch (error: any) {
     return NextResponse.json(
       { msg: "Failed to retrieve words", error: error.message },

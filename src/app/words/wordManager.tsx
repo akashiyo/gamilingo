@@ -152,7 +152,7 @@ export default function WordManager() {
             <div className="flex items-center gap-2">
               {w.img && (
                 <img
-                  src={`data:image/png;base64,${w.img}`}
+                  src={`data:image/jpg;base64,${w.img}`}
                   alt="word"
                   className="w-12 h-12 object-cover"
                 />

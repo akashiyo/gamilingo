@@ -1,4 +1,4 @@
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
@@ -16,7 +16,14 @@ export const GET = async (_req: Request, { params }: { params: { id: string } })
       return NextResponse.json({ msg: "Word not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ word });
+    // image object convert into base64
+    const serializedWord = {
+      ...word,
+      img: word.img ? Buffer.from(word.img).toString("base64") : null,
+    };
+
+    // return serialized word (with base64 image)
+    return NextResponse.json({ word: serializedWord });
   } catch (error: any) {
     return NextResponse.json(
       { msg: "Failed to retrieve the word", error: error.message },

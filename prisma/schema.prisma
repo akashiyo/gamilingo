@@ -1,9 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  // output   = "../src/generated/prisma" // replace improts by @prisma/client
 }
 
 datasource db {
@@ -12,25 +9,26 @@ datasource db {
 }
 
 model Word {
-  id          Int      @id @default(autoincrement())
-  en          String
-  fr          String
-  category    Int      @default(1) // 1, 2, 3
-  definition  String?
-  img         Bytes?   // Image = donnée binaire.
-  theme       String?
+  id         Int     @id @default(autoincrement())
+  en         String
+  fr         String
+  category   Int     @default(1)
+  definition String?
+  img        Bytes?
+  // imgType    String? // mime type variable
+  theme      String?
 }
 
 model User {
-  id              Int @id @default(autoincrement())
-  name            String
-  username        String 
-  pwd             String
-  level           Int      @default(1)
-  role            String
+  id       Int    @id @default(autoincrement())
+  name     String
+  username String
+  pwd      String
+  level    Int    @default(1)
+  role     String
 }
 
 model Dragon {
-  id  Int @id @default(autoincrement())
+  id   Int    @id @default(autoincrement())
   name String
 }

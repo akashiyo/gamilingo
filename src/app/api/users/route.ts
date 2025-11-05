@@ -1,5 +1,6 @@
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -19,17 +20,14 @@ export const GET = async () => {
 };
 
 //
-// POST (create a new user)
+// POST (create a new user) and secure their password with bcrypt
 //
 export const POST = async (req: Request) => {
   try {
     const { name, username, pwd, role } = await req.json();
 
     if (!name || !username || !pwd || !role) {
-      return NextResponse.json(
-        { msg: "Missing required fields" },
-        { status: 400 }
-      );
+      return NextResponse.json( { msg: "Missing required fields" }, { status: 400 } );
     }
 
     const existingUser = await prisma.user.findFirst({
@@ -43,8 +41,10 @@ export const POST = async (req: Request) => {
       );
     }
 
+    const hashedPwd = await bcrypt.hash(pwd, 10);
+
     const newUser = await prisma.user.create({
-      data: { name, username, pwd, role },
+      data: { name, username, pwd: hashedPwd, role },
     });
 
     return NextResponse.json({
