@@ -46,6 +46,9 @@ export default function RootLayout({
             <Link href="/memory" className="hover:underline">
               Memory
             </Link>
+            <Link href="/flashcards" className="hover:underline">
+            Flashcards
+            </Link>
           </nav>
         </header>
 
