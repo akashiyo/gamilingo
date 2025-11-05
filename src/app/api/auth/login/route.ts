@@ -8,14 +8,14 @@ const prisma = new PrismaClient();
 
 export const POST = async (req: Request) => {
   try {
-    const { username, password } = await req.json();
+    const { username, pwd } = await req.json();
 
     const user = await prisma.user.findFirst({ where: { username } });
     if (!user) {
       return NextResponse.json({ msg: "User not found" }, { status: 404 });
     }
 
-    const valid = await bcrypt.compare(password, user.pwd);
+    const valid = await bcrypt.compare(pwd, user.pwd);
     if (!valid) {
       return NextResponse.json({ msg: "Invalid credentials" }, { status: 401 });
     }
