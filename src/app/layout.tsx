@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link"; // pour créer des liens entre pages
 import "./globals.css";
+import BottomNav from "@/app/main-menu";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,6 +56,7 @@ export default function RootLayout({
         {/* contenu spécifique à chaque page */}
         <main className="p-6">{children}</main>
 
+        <BottomNav/>
         {/* footer global */}
         <footer className="text-center text-sm p-4 mt-6 flex-wrap items-center justify-center">
           © {new Date().getFullYear()} Gamilingo
