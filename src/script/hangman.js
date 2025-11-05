@@ -1,6 +1,6 @@
 "use client";
 import React, { Component } from "react";
-import "../app/hangman/hangman.css";
+
 
 class Hangman extends Component {
     static defaultProps = {
@@ -133,7 +133,8 @@ class Hangman extends Component {
                     value={ltr}
                     onClick={this.handleGuess}
                     disabled={isGuessed}
-                    className={`${baseClasses} ${colorClasses} disabled:cursor-not-allowed`}
+                    className={`${baseClasses} ${colorClasses} disabled:cursor-not-allowed rounded-4xl` }
+
                 >
                     {ltr}
                 </button>
@@ -159,8 +160,8 @@ class Hangman extends Component {
                     <p className="text-red-600 font-semibold">Erreur : {error}</p>
                     <button
                         onClick={this.reset}
-                        className="bg-purple-500 text-white px-6 py-2 rounded-full-30 hover:bg-purple-600 shadow-lg"
-                        style={{border-radius="30%"}}
+                        className="bg-purple-500 text-white px-6 py-2 rounded-4xl hover:bg-purple-600 shadow-lg"
+
                     >
                         Réessayer
                     </button>
@@ -179,28 +180,6 @@ class Hangman extends Component {
 
         return (
             <div className="bg-purple-200 min-h-screen flex flex-col px-4 py-6">
-                {/* Header avec progression */}
-                <div className="flex items-center justify-between mb-6 max-w-md mx-auto w-full">
-                    <button
-                        onClick={this.reset}
-                        className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 shadow-md hover:bg-gray-50"
-                    >
-                        ←
-                    </button>
-
-                    <div className="flex-1 mx-4">
-                        <div className="bg-gray-200 rounded-full h-4 overflow-hidden">
-                            <div
-                                className="bg-green-400 h-full rounded-full transition-all duration-300"
-                                style={{ width: `${progress}%` }}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="bg-white rounded-full px-3 py-1 text-sm font-semibold text-gray-700 shadow-md">
-                        Level 1
-                    </div>
-                </div>
 
                 {/* Container principal */}
                 <div className="max-w-md mx-auto w-full flex flex-col items-center">
@@ -219,7 +198,7 @@ class Hangman extends Component {
                     </div>
 
                     {/* Alphabet - grille 6 colonnes */}
-                    <div className="grid grid-cols-6 gap-2 mb-6 w-full max-w-sm">
+                    <div className="grid grid-cols-6 gap-2 mb-6 w-full max-w-sm rounded-[35%]">
                         {gameState}
                     </div>
 
