@@ -60,7 +60,7 @@ export default function RootLayout({
         </header>
 
         {/* contenu spécifique à chaque page */}
-        <main className="p-6">{children}</main>
+        <main>{children}</main>
 
 
         {/* footer global */}
