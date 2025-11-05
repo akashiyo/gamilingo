@@ -40,6 +40,12 @@ export default function RootLayout({
             <Link href="/ai-chat" className="hover:underline">
               AI Chat
             </Link>
+            <Link href="/hangman" className="hover:underline">
+              Hangman
+            </Link>
+            <Link href="/memory" className="hover:underline">
+              Memory
+            </Link>
           </nav>
         </header>
 
