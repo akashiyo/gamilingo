@@ -56,12 +56,10 @@ export default function RootLayout({
         {/* contenu spécifique à chaque page */}
         <main className="p-6">{children}</main>
 
-        <BottomNav/>
+
         {/* footer global */}
         <footer className="text-center text-sm p-4 mt-6 flex-wrap items-center justify-center">
-          © {new Date().getFullYear()} Gamilingo
-          <div> <a href="/"> Conditions générales de vente </a></div>
-          <div> <a href="/"> Politique de confidentialité </a></div>
+          <BottomNav/>
         </footer>
       </body>
     </html>
