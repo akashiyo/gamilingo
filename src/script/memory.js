@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 const difficulties = [1, 2, 3];
 
+
 const Memory = () => {
     // On peut garder gridSize si tu veux ajuster le nombre de colonnes par exemple
     const [gridCols, setGridCols] = useState(4);  // nombre de colonnes visuelles

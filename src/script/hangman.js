@@ -31,6 +31,7 @@ class Hangman extends Component {
         error: null,
     };
 
+
     // 🔹 Récupère un mot aléatoire via ton API
     async fetchRandomWord() {
         try {

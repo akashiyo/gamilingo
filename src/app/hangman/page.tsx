@@ -1,9 +1,10 @@
 import Image from "next/image";
+import Hangman from "@/script/hangman.js";
 
 export default function Home() {
-  return ( 
-    <div>
-        <h1> Welcome to the Hangman Game </h1>
-    </div>
+  return (
+
+        <Hangman/>
+
   );
 }
