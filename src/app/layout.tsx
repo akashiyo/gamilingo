@@ -48,7 +48,13 @@ export default function RootLayout({
               Memory
             </Link>
             <Link href="/flashcards" className="hover:underline">
-            Flashcards
+              Flashcards
+            </Link>
+            <Link href="/login" className="hover:underline">
+              Login
+            </Link>
+            <Link href="/signup" className="hover:underline">
+              Sign-up
             </Link>
           </nav>
         </header>
