@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ msg: "User not found" }, { status: 404 });
     }
 
-    // Vérifie le mot de passe (bcrypt)
+     // Vérifie le mot de passe (bcrypt)
     //const valid = await bcrypt.compare(pwd, user.pwd);
     const valid = user.pwd === pwd; // ⚠️ uniquement pour tester sans hash
 

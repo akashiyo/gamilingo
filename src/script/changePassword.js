@@ -70,7 +70,7 @@ export default function ChangePassword() {
                     {loading ? "Mise à jour..." : "Valider"}
                 </button>
 
-                <p className="back-link">
+                 <p className="back-link">
                     <a href="/profil">← Retour au profil</a>
                 </p>
             </div>

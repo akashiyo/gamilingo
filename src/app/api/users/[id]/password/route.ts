@@ -45,7 +45,7 @@ export async function PUT(req, { params }) {
         console.error("Erreur lors du changement de mot de passe :", error);
         return NextResponse.json(
             { msg: "Erreur interne du serveur", error: error.message },
-            { status: 500 }
+             { status: 500 }
         );
     }
 }
