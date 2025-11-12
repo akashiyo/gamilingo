@@ -73,7 +73,7 @@ export default function Home() {
                 src="/GAMILINGOW.svg"
                 alt="gamilingo"
                 style={{
-                    bottom: "25%", // on le remonte un peu plus
+                    bottom: "13%", // on le remonte un peu plus
                     left: "50%",
                     transform: "translateX(-50%)",
                     objectFit: "contain",
@@ -84,7 +84,7 @@ export default function Home() {
             <div
                 className="absolute left-1/2 -translate-x-1/2 w-full flex justify-center z-10"
                 style={{
-                    bottom: "12%", // ✅ au lieu de bottom-0 → remonte le dragon sur mobile
+                    bottom: 0
                 }}
             >
                 <div className="relative w-[100vw] max-w-[700px]">
