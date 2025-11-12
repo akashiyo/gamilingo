@@ -26,6 +26,7 @@ model User {
   role     String
   email    String
   img      Bytes?
+  xp       Int    @default(0)
 }
 
 model Dragon {
