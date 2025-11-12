@@ -26,7 +26,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(224, 211, 239, 1);
+    background: #E0D3EF;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
     padding: 40px 0 20px;

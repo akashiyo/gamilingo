@@ -10,18 +10,20 @@ export default function Profil() {
     useEffect(() => {
         async function fetchUser() {
             try {
-                // Exemple d’appel : adapte selon ton backend
-                const response = await fetch("/api/users");
+                const storedUser = localStorage.getItem("user");
+                if (!storedUser) throw new Error("Aucun utilisateur connecté.");
+                const userId = JSON.parse(storedUser).id;
+
+                const response = await fetch(`/api/users/${userId}`);
                 if (!response.ok) throw new Error("Erreur API");
                 const data = await response.json();
-                setUser(data);
+                setUser(data.user);
             } catch (error) {
                 console.error("Erreur lors du chargement de l'utilisateur :", error);
             } finally {
                 setLoading(false);
             }
         }
-
         fetchUser();
     }, []);
 
@@ -30,61 +32,45 @@ export default function Profil() {
 
     return (
         <section className="profile-container">
-            {/* En-tête avec avatar et username */}
             <div className="profile-header">
-                <img src={user.profileImage || "/profil.svg"} alt="Profil"/>
+                <img
+                    src={
+                        user.img && user.img.data
+                            ? `data:image/png;base64,${Buffer.from(user.img.data).toString("base64")}`
+                            : "/profil.svg"
+                    }
+                    alt="Profil"
+                    className="profile-avatar"
+                />
                 <h2 className="profile-name">{user.username}</h2>
             </div>
 
-            {/* Badges niveau et rôle */}
             <div className="profile-badges">
                 <div className="badge level-badge">
                     <img src="/fire.svg" alt="Fire" className="badge-icon" />
                     <p className="badge-text">Lv. {user.level}</p>
                 </div>
                 <div className="badge">
-                    <img src="/language.svg" alt="English" className="badge-icon2"/>
+                    <img src="/language.svg" alt="English" className="badge-icon2" />
                 </div>
             </div>
 
-            {/* Champs de formulaire */}
             <div className="profile-form">
-                <input
-                    type="text"
-                    value={user.name}
-                    placeholder="Nom"
-                    className="form-input"
-                    readOnly
-                />
-                <input
-                    type="text"
-                    value={user.username}
-                    placeholder="Nom d'utilisateur"
-                    className="form-input"
-                    readOnly
-                />
-                <input
-                    type="text"
-                    value={`Email : ${user.mail}`}
-                    className="form-input"
-                    readOnly
-                />
+                <input type="text" value={user?.name || ""} placeholder="Nom" className="form-input" />
+                <input type="text" value={user?.username || ""} placeholder="Nom d'utilisateur" className="form-input" />
+                <input type="text" value={user?.email || ""} placeholder="Email" className="form-input" />
             </div>
 
-            {/* Bouton valider */}
             <div className="profile-action">
                 <button className="validate-btn">Valider</button>
             </div>
 
-            {/* Liens */}
             <div className="profile-links">
                 <a href="/change-password" className="profile-link">
-                    Changer mon mot de passe
-                    <span className="link-arrow">›</span>
+                    Changer mon mot de passe<span className="link-arrow">›</span>
                 </a>
                 <a href="/delete-account" className="profile-link">
-                    Supprimer mon compte
-                    <span className="link-arrow">›</span>
+                    Supprimer mon compte<span className="link-arrow">›</span>
                 </a>
             </div>
         </section>

@@ -1,0 +1,88 @@
+/* ===== PAGE CONTAINER ===== */
+.delete-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f7f5ff; /* fond violet clair */
+}
+
+/* ===== CARD ===== */
+.delete-card {
+    background-color: white;
+    padding: 2rem 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.delete-card h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.warning-text {
+    color: #444;
+    font-size: 15px;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.danger-text {
+    color: #d9534f;
+    font-weight: 600;
+}
+
+/* ===== MESSAGES ===== */
+.error-text {
+    color: #d9534f;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+/* ===== BUTTONS ===== */
+.delete-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.btn-danger {
+    background-color: #d9534f;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-danger:hover {
+    background-color: #c9302c;
+}
+
+.btn-danger:disabled {
+    background-color: #e08a87;
+    cursor: not-allowed;
+}
+
+.btn-cancel {
+    background-color: #7A4A9B;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #7A4A9B;
+}

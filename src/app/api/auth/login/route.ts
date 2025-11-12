@@ -6,26 +6,40 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
-export const POST = async (req: Request) => {
+export async function POST(req: Request) {
   try {
     const { username, pwd } = await req.json();
 
+    // Vérifie que les deux champs sont bien fournis
+    if (!username || !pwd) {
+      return NextResponse.json(
+          { msg: "Username and password are required" },
+          { status: 400 }
+      );
+    }
+
+    // Recherche de l'utilisateur
     const user = await prisma.user.findFirst({ where: { username } });
     if (!user) {
       return NextResponse.json({ msg: "User not found" }, { status: 404 });
     }
 
-    const valid = await bcrypt.compare(pwd, user.pwd);
+    // Vérifie le mot de passe (bcrypt)
+    //const valid = await bcrypt.compare(pwd, user.pwd);
+    const valid = user.pwd === pwd; // ⚠️ uniquement pour tester sans hash
+
     if (!valid) {
       return NextResponse.json({ msg: "Invalid credentials" }, { status: 401 });
     }
 
+    // Génération du token JWT
     const token = jwt.sign(
-      { id: user.id, role: user.role },
-      process.env.JWT_SECRET!,
-      { expiresIn: "1h" }
+        { id: user.id, role: user.role },
+        process.env.JWT_SECRET || "default_secret_key", // ⚠️ pense à mettre une vraie clé dans ton .env
+        { expiresIn: "1h" }
     );
 
+    // Création du cookie sécurisé
     const cookieStore = await cookies();
     cookieStore.set("token", token, {
       httpOnly: true,
@@ -34,14 +48,22 @@ export const POST = async (req: Request) => {
       path: "/",
     });
 
+    // Réponse JSON avec les infos utiles
     return NextResponse.json({
       msg: "Login successful",
-      user: { id: user.id, name: user.name, role: user.role },
+      user: {
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        role: user.role,
+        level: user.level,
+      },
     });
   } catch (error: any) {
+    console.error("Erreur dans /api/auth/login :", error);
     return NextResponse.json(
-      { msg: "Login failed", error: error.message },
-      { status: 500 }
+        { msg: "Login failed", error: error.message },
+        { status: 500 }
     );
   }
-};
+}

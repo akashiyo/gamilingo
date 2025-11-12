@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 //
 // GET one user
 //
-export const GET = async (_req: Request, { params }: { params: { id: string } }) => {
+export const GET = async (_req, { params }) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: Number(params.id) },
@@ -17,41 +17,51 @@ export const GET = async (_req: Request, { params }: { params: { id: string } })
     }
 
     return NextResponse.json({ user });
-  } catch (error: any) {
+  } catch (error) {
     return NextResponse.json(
-      { msg: "Failed to retrieve the user", error: error.message },
-      { status: 500 }
+        { msg: "Failed to retrieve the user", error: error.message },
+        { status: 500 }
     );
   }
 };
 
 //
-// PUT (update user)
+// PUT (update user) ✅ VERSION CORRIGÉE POUR FORM DATA
 //
-export const PUT = async (req: Request, { params }: { params: { id: string } }) => {
+export const PUT = async (req, { params }) => {
   try {
-    const { name, role, level } = await req.json();
+    const formData = await req.formData();
 
-    if (!name && !role && !level) {
-      return NextResponse.json(
-        { msg: "No fields to update provided" },
-        { status: 400 }
-      );
+    const name = formData.get("name");
+    const username = formData.get("username");
+    const email = formData.get("email");
+    const imageFile = formData.get("img");
+
+    let imgBuffer = undefined;
+    if (imageFile && typeof imageFile.arrayBuffer === "function") {
+      const arrayBuffer = await imageFile.arrayBuffer();
+      imgBuffer = Buffer.from(arrayBuffer);
     }
 
     const updatedUser = await prisma.user.update({
       where: { id: Number(params.id) },
-      data: { name, role, level },
+      data: {
+        name: name || undefined,
+        username: username || undefined,
+        email: email || undefined,
+        ...(imgBuffer && { img: imgBuffer }),
+      },
     });
 
     return NextResponse.json({
       msg: `User ${params.id} updated successfully`,
       user: updatedUser,
     });
-  } catch (error: any) {
+  } catch (error) {
+    console.error("Erreur PUT user :", error);
     return NextResponse.json(
-      { msg: "Failed to update the user", error: error.message },
-      { status: 500 }
+        { msg: "Failed to update the user", error: error.message },
+        { status: 500 }
     );
   }
 };
@@ -59,7 +69,7 @@ export const PUT = async (req: Request, { params }: { params: { id: string } }) 
 //
 // DELETE (remove user)
 //
-export const DELETE = async (_req: Request, { params }: { params: { id: string } }) => {
+export const DELETE = async (_req, { params }) => {
   try {
     await prisma.user.delete({
       where: { id: Number(params.id) },
@@ -68,10 +78,10 @@ export const DELETE = async (_req: Request, { params }: { params: { id: string }
     return NextResponse.json({
       msg: `User with id ${params.id} deleted successfully`,
     });
-  } catch (error: any) {
+  } catch (error) {
     return NextResponse.json(
-      { msg: "Failed to delete the user", error: error.message },
-      { status: 500 }
+        { msg: "Failed to delete the user", error: error.message },
+        { status: 500 }
     );
   }
 };
