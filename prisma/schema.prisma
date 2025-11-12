@@ -15,6 +15,7 @@ model Word {
   definition String?
   img        Bytes?
   theme      String?
+  wordStatus  UserWordStatus[]
 }
 
 model User {
@@ -27,9 +28,24 @@ model User {
   email    String
   img      Bytes?
   xp       Int    @default(0)
+  wordStatus UserWordStatus[]
 }
 
 model Dragon {
   id   Int    @id @default(autoincrement())
   name String
+}
+
+model UserWordStatus {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  wordId    Int
+  known     Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id])
+  word      Word     @relation(fields: [wordId], references: [id])
+
+  @@unique([userId, wordId]) // Ensures one status per word per user
 }
