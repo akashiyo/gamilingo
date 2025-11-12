@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 const SECRET = process.env.JWT_SECRET || "supersecret";
 
 export function middleware(req: NextRequest) {
-  const token = req.cookies.get("token")?.value; // 👈 match login cookie
+  const token = req.cookies.get("token")?.value;
   const protectedPaths = ["/words", "/hangman"]; // protected routes
 
   if (protectedPaths.some((p) => req.nextUrl.pathname.startsWith(p))) {

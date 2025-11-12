@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  // output   = "../src/generated/prisma" // replace improts by @prisma/client
 }
 
 datasource db {
@@ -15,7 +14,6 @@ model Word {
   category   Int     @default(1)
   definition String?
   img        Bytes?
-  // imgType    String? // mime type variable
   theme      String?
 }
 
@@ -26,6 +24,8 @@ model User {
   pwd      String
   level    Int    @default(1)
   role     String
+  email    String
+  img      Bytes?
 }
 
 model Dragon {

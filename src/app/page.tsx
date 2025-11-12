@@ -6,7 +6,7 @@ import Head from 'next/head';
 
 export default function Home() {
   return (
-    <div className="font-sans min-h-screen flex flex-col items-center justify-center"> 
+    <div className="font-sans min-h-screen flex flex-col items-center justify-center">
       <main>
         <div>
           <main>
@@ -17,14 +17,19 @@ export default function Home() {
               GAMILINGOW
             </h1>
 
-            <div className="relative z-10">
+            <div className="relative z-10 ">
               <Image 
-                src="/Vodka.png" 
+                src="/vodka.png" 
                 alt="Mon Vodka" 
                 width={900} 
                 height={1200} 
             />
-            
+
+            <div className="absolute z-[15]">
+              {/* visible call-to-action button */}
+              <button name="lesgo" id="lesgo_home" type="button" className="px-4 py-2 bg-blue-600 text-white rounded">C'est parti</button>
+            </div>
+
       </div>
           </main>
         </div>
