@@ -56,6 +56,9 @@ export default function RootLayout({
             <Link href="/signup" className="hover:underline">
               Sign-up
             </Link>
+            <Link href="/profil" className="hover:underline">
+              Profil
+            </Link>
           </nav>
         </header>
 
