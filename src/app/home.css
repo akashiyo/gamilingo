@@ -1,0 +1,46 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow-x: hidden; /* empêche le décalage horizontal */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body{
+    background: rgba(186, 208, 247, 1);
+}
+
+@keyframes moveCloud1 {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(50px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes moveCloud2 {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-60px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes moveCloud3 {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(80px); }
+    100% { transform: translateX(0); }
+}
+
+.animate-cloud1 {
+    animation: moveCloud1 25s ease-in-out infinite;
+}
+
+.animate-cloud2 {
+    animation: moveCloud2 30s ease-in-out infinite;
+}
+
+.animate-cloud3 {
+    animation: moveCloud3 35s ease-in-out infinite;
+}
