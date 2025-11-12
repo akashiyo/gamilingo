@@ -6,6 +6,8 @@
   --dark-purple: #7A4A9B; 
   --medium-purple: #E0D3EF;
   --lightest-purple: #EFE9F7;
+  --medium-grey: #999999;
+  --vibrant-yellow: #FFD250;
 }
 
 @theme inline {
