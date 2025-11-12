@@ -100,8 +100,12 @@ export default function Home() {
                     {/* Bouton au-dessus du dragon */}
                     <button
                         type="button"
-                        className="absolute left-1/2 -translate-x-1/2 bottom-[11%] px-7 py-3 bg-indigo-600 text-white rounded-full font-semibold shadow-lg hover:bg-indigo-700 active:scale-95 transition"
+                        className="absolute left-1/2 -translate-x-1/2 bottom-[11%] px-7 py-3 text-white rounded-full font-semibold shadow-lg active:scale-95 transition"
                         onClick={() => (window.location.href = '/login')}
+                        style={{
+                            backgroundColor: "var(--dark-purple)",
+                            bottom:"80px"
+                        }}
                     >
                         C’est parti
                     </button>
