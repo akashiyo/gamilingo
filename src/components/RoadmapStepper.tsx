@@ -16,9 +16,18 @@ type Step = {
 interface RoadmapStepperProps {
   steps: Step[];
   title?: string;
+  locked?: boolean;
+  onComplete?: () => void;
+  level?: number; 
 }
 
-export default function RoadmapStepper({ steps, title = "Road to Lv. B1" }: RoadmapStepperProps) {
+export default function RoadmapStepper({
+  steps,
+  title = "Road to Lv. B1",
+  level = 1,
+  locked,
+  onComplete,
+}: RoadmapStepperProps) {
   const router = useRouter();
   const [progress, setProgress] = useState(steps.map((s) => s.isCompleted || false));
 
@@ -26,9 +35,10 @@ export default function RoadmapStepper({ steps, title = "Road to Lv. B1" }: Road
     const isUnlocked = index === 0 || progress[index - 1];
     if (!isUnlocked) return;
 
-    // Simulate navigation to a game page
-    router.push(`/games/${steps[index].id}`);
+    const step = steps[index];
+    router.push(`/games?category=${level}&theme=${encodeURIComponent(step.title)}`);
   };
+
 
   const handleStepComplete = (index: number) => {
     const newProgress = [...progress];
