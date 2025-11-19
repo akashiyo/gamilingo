@@ -34,3 +34,55 @@ body {
 button{
   cursor: pointer;
 }
+
+.user-header-container {
+  width: 100%;
+  background: white;
+  padding: 10px 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  max-width: 700px;
+  margin: 0 auto; /* centre */
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+.user-header-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-header-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-header-username {
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+}
+
+.user-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.level-box {
+  padding: 4px 8px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}

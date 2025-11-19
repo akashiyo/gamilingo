@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link"; // pour créer des liens entre pages
 import "./globals.css";
 import BottomNav from "@/app/main-menu";
+import UserHeader from "@/components/UserHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,6 +61,9 @@ export default function RootLayout({
               Profil
             </Link>
           </nav>
+        </header>
+        <header>
+          <UserHeader/>
         </header>
 
         {/* contenu spécifique à chaque page */}

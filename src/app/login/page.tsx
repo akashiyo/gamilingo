@@ -27,7 +27,8 @@ export default function LoginPage() {
 
       // ✅ Stocke l'utilisateur connecté dans localStorage
       localStorage.setItem("user", JSON.stringify(data.user));
-
+// 🔔 prévenir le header qu'un nouvel utilisateur est connecté
+      window.dispatchEvent(new Event("user-updated"));
       // ✅ Redirection
       router.push("/profil"); // tu peux remettre "/hangman" si besoin
 

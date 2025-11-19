@@ -16,7 +16,18 @@ export const GET = async (_req, { params }) => {
       return NextResponse.json({ msg: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ user });
+    // Convertir l'image en Base64 si elle existe
+    let imageBase64 = null;
+    if (user.img) {
+      imageBase64 = Buffer.from(user.img).toString("base64");
+    }
+
+    return NextResponse.json({
+      user: {
+        ...user,
+        img: imageBase64, // en Base64, plus propre !
+      },
+    });
   } catch (error) {
     return NextResponse.json(
         { msg: "Failed to retrieve the user", error: error.message },
@@ -24,6 +35,7 @@ export const GET = async (_req, { params }) => {
     );
   }
 };
+
 
 //
 // PUT (update user) ✅ VERSION CORRIGÉE POUR FORM DATA
