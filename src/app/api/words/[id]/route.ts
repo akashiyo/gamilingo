@@ -16,13 +16,34 @@ export const GET = async (_req: Request, { params }: { params: { id: string } })
       return NextResponse.json({ msg: "Word not found" }, { status: 404 });
     }
 
-    // image object convert into base64
+    // image object convert into base64 and include detected mime
     const serializedWord = {
       ...word,
       img: word.img ? Buffer.from(word.img).toString("base64") : null,
+      imgMime: word.img
+        ? (function detect(buf: Uint8Array | Buffer | null | undefined) {
+            if (!buf) return null;
+            const b = Buffer.from(buf as Uint8Array);
+            if (b.length >= 3 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff)
+              return "image/jpeg";
+            if (
+              b.length >= 8 &&
+              b[0] === 0x89 &&
+              b[1] === 0x50 &&
+              b[2] === 0x4e &&
+              b[3] === 0x47 &&
+              b[4] === 0x0d &&
+              b[5] === 0x0a &&
+              b[6] === 0x1a &&
+              b[7] === 0x0a
+            )
+              return "image/png";
+            return null;
+          })(word.img)
+        : null,
     };
 
-    // return serialized word (with base64 image)
+    // return serialized word (with base64 image and mime)
     return NextResponse.json({ word: serializedWord });
   } catch (error: any) {
     return NextResponse.json(

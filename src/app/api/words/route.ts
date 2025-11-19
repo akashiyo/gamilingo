@@ -3,6 +3,29 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
+// detect mime type (png or jpeg) from the image Buffer/Uint8Array
+function detectImageMime(buf: Uint8Array | Buffer | null | undefined): string | null {
+  if (!buf) return null;
+  const b = Buffer.from(buf as Uint8Array);
+  // JPEG magic bytes: 0xFF 0xD8 0xFF
+  if (b.length >= 3 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff) return "image/jpeg";
+  // PNG magic bytes: 89 50 4E 47 0D 0A 1A 0A
+  if (
+    b.length >= 8 &&
+    b[0] === 0x89 &&
+    b[1] === 0x50 &&
+    b[2] === 0x4e &&
+    b[3] === 0x47 &&
+    b[4] === 0x0d &&
+    b[5] === 0x0a &&
+    b[6] === 0x1a &&
+    b[7] === 0x0a
+  )
+    return "image/png";
+
+  return null;
+}
+
 //
 // GET all words OR filtered
 // Supports:
@@ -19,7 +42,7 @@ export const GET = async (req: Request) => {
 
     const filters: any = {};
 
-    // 🔥 FIXED: convert category string → number
+    // convert category string → number
     if (category) {
       const categoryNumber = Number(category);
 
@@ -40,10 +63,11 @@ export const GET = async (req: Request) => {
       where: filters,
     });
 
-    // convert image Buffer to base64 so the client can display it
+    // convert image Buffer to base64 so the client can display it and include detected mime
     const serialized = words.map((w) => ({
       ...w,
       img: w.img ? Buffer.from(w.img).toString("base64") : null,
+      imgMime: w.img ? detectImageMime(w.img) : null,
     }));
 
     return NextResponse.json({ words: serialized || [] });
