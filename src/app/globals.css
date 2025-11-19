@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #FAFAFA;
   --foreground: #171717;
+  --not-black-black: #27364E;
   --dark-purple: #7A4A9B; 
   --medium-purple: #E0D3EF;
   --lightest-purple: #EFE9F7;
@@ -30,3 +31,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+button{
+  cursor: pointer;
+}

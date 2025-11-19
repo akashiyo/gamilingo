@@ -4,11 +4,41 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 //
-// GET all words
+// GET all words OR filtered
+// Supports:
+// - /api/words
+// - /api/words?category=2
+// - /api/words?theme=Food
+// - /api/words?category=2&theme=Food
 //
-export const GET = async () => {
+export const GET = async (req: Request) => {
   try {
-    const words = await prisma.word.findMany();
+    const { searchParams } = new URL(req.url);
+    const category = searchParams.get("category");
+    const theme = searchParams.get("theme");
+
+    const filters: any = {};
+
+    // 🔥 FIXED: convert category string → number
+    if (category) {
+      const categoryNumber = Number(category);
+
+      if (isNaN(categoryNumber)) {
+        return NextResponse.json(
+          { msg: "Invalid category value (must be a number)" },
+          { status: 400 }
+        );
+      }
+
+      filters.category = categoryNumber;
+    }
+
+    // theme can stay string
+    if (theme) filters.theme = theme;
+
+    const words = await prisma.word.findMany({
+      where: filters,
+    });
 
     // convert image Buffer to base64 so the client can display it
     const serialized = words.map((w) => ({
@@ -16,9 +46,9 @@ export const GET = async () => {
       img: w.img ? Buffer.from(w.img).toString("base64") : null,
     }));
 
-    // return serialized words (with base64 images) to the client
-    return NextResponse.json({ words: serialized || [] }); // if no words in the database yet, return empty array
+    return NextResponse.json({ words: serialized || [] });
   } catch (error: any) {
+    console.error("API FILTER ERROR:", error);
     return NextResponse.json(
       { msg: "Failed to retrieve words", error: error.message },
       { status: 500 }
@@ -31,7 +61,7 @@ export const GET = async () => {
 //
 export const POST = async (req: Request) => {
   try {
-    const { en, fr, category, definition, img , theme} = await req.json();
+    const { en, fr, category, definition, img, theme } = await req.json();
 
     if (!en || !fr) {
       return NextResponse.json(
@@ -46,7 +76,7 @@ export const POST = async (req: Request) => {
         fr,
         category: category ?? 1,
         definition,
-        img: img ? Buffer.from(img, "base64") : undefined, // image en base64
+        img: img ? Buffer.from(img, "base64") : undefined,
         theme,
       },
     });
