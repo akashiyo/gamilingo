@@ -7,7 +7,7 @@ const XP_PER_LEVEL = 750; // should match backend computation
 export default function XPBar() {
   const { user, loading, isAuthenticated } = useUser();
 
-  if (loading) return <div className="ml-auto pr-4 text-white">Loading...</div>;
+  if (loading) return <div className="ml-auto pr-4 text-gray-700">Loading...</div>;
   if (!isAuthenticated || !user) return null;
 
   const { xp, level } = user;
@@ -19,11 +19,11 @@ export default function XPBar() {
 
   return (
     <div className="ml-auto flex items-center gap-3 pr-4" aria-live="polite">
-      <div className="text-sm text-white">Lvl {level}</div>
-      <div className="w-48 bg-gray-600 rounded overflow-hidden h-4">
+      <div className="text-sm text-gray-700">Lvl {level}</div>
+      <div className="w-48 bg-gray-300 rounded overflow-hidden h-4">
         <div className="bg-emerald-400 h-4" style={{ width: `${percent}%` }} />
       </div>
-      <div className="text-xs text-white opacity-90">{xp} XP · {toNext} to next</div>
+      <div className="text-xs text-gray-700 opacity-90">{xp} XP · {toNext} to next</div>
     </div>
   );
 }

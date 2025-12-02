@@ -35,14 +35,12 @@ export default function RootLayout({
       >
         <UserProvider>
           {/* barre de navigation */}
-          <header className="bg-gray-800 text-white p-4">
+          <header className="p-4">
             <div className="container mx-auto flex items-center justify-between">
-              <AuthHeader />
-              <XPBar />
+              {/* <AuthHeader /> */}
+              {/* <XPBar /> */}
+              <UserHeader/>
             </div>
-          </header>
-          <header>
-            <UserHeader/>
           </header>
 
           {/* contenu spécifique à chaque page */}

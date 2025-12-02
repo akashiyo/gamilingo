@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useUser } from "@/contexts/UserContext";
+import XPBar from "@/components/XPBar";
 
 export default function UserHeader() {
     const { user, isAuthenticated } = useUser();
@@ -22,6 +23,10 @@ export default function UserHeader() {
                 />
 
                 <span className="user-header-username">{user.username}</span>
+            </div>
+
+            <div className="user-header-center">
+                <XPBar />
             </div>
 
             <div className="user-header-right">
