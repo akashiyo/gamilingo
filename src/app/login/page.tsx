@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/contexts/UserContext";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { setUser } = useUser();
   const [username, setUsername] = useState("");
   const [pwd, setPwd] = useState("");
   const [error, setError] = useState("");
@@ -25,12 +27,9 @@ export default function LoginPage() {
         return;
       }
 
-      // ✅ Stocke l'utilisateur connecté dans localStorage
-      localStorage.setItem("user", JSON.stringify(data.user));
-// 🔔 prévenir le header qu'un nouvel utilisateur est connecté
-      window.dispatchEvent(new Event("user-updated"));
-      // ✅ Redirection
-      router.push("/profil"); // tu peux remettre "/hangman" si besoin
+      setUser(data.user);
+      
+      router.push("/profil");
 
     } catch (err) {
       setError("Erreur réseau ou serveur.");

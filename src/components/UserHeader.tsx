@@ -1,32 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useUser } from "@/contexts/UserContext";
 
 export default function UserHeader() {
-    const [user, setUser] = useState<any>(null);
+    const { user, isAuthenticated } = useUser();
 
-    // fonction pour charger l'utilisateur depuis localStorage
-    const loadUserFromStorage = () => {
-        if (typeof window === "undefined") return;
-        const stored = localStorage.getItem("user");
-        setUser(stored ? JSON.parse(stored) : null);
-    };
-
-    useEffect(() => {
-        // 1ᵉʳ chargement
-        loadUserFromStorage();
-
-        // écoute l'évènement "user-updated"
-        const handler = () => loadUserFromStorage();
-        window.addEventListener("user-updated", handler);
-
-        return () => {
-            window.removeEventListener("user-updated", handler);
-        };
-    }, []);
-
-    if (!user) return null;
+    if (!isAuthenticated || !user) return null;
 
     return (
         <div className="user-header-container">

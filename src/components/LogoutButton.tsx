@@ -1,19 +1,15 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { useUser } from "@/contexts/UserContext";
 
 export default function LogoutButton() {
   const router = useRouter();
+  const { logout } = useUser();
 
   const handleLogout = async () => {
-    try {
-      await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-    } catch (e) {
-      // ignore
-    }
+    await logout();
     router.push("/login");
-    // notify XPBar and other listeners
-    window.dispatchEvent(new Event("xp-updated"));
   };
 
   return (

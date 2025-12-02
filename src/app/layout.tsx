@@ -6,6 +6,7 @@ import AuthHeader from "@/components/AuthHeader";
 import "./globals.css";
 import BottomNav from "@/app/main-menu";
 import UserHeader from "@/components/UserHeader";
+import { UserProvider } from "@/contexts/UserContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,25 +33,27 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* barre de navigation */}
-        <header className="bg-gray-800 text-white p-4">
-          <div className="container mx-auto flex items-center justify-between">
-            <AuthHeader />
-            <XPBar />
-          </div>
-        </header>
-        <header>
-          <UserHeader/>
-        </header>
+        <UserProvider>
+          {/* barre de navigation */}
+          <header className="bg-gray-800 text-white p-4">
+            <div className="container mx-auto flex items-center justify-between">
+              <AuthHeader />
+              <XPBar />
+            </div>
+          </header>
+          <header>
+            <UserHeader/>
+          </header>
 
-        {/* contenu spécifique à chaque page */}
-        <main>{children}</main>
+          {/* contenu spécifique à chaque page */}
+          <main>{children}</main>
 
 
-        {/* footer global */}
-        <footer className="text-center text-sm p-4 mt-6 flex-wrap items-center justify-center">
-          <BottomNav/>
-        </footer>
+          {/* footer global */}
+          <footer className="text-center text-sm p-4 mt-6 flex-wrap items-center justify-center">
+            <BottomNav/>
+          </footer>
+        </UserProvider>
       </body>
     </html>
   );

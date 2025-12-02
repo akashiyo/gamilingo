@@ -1,40 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useUser } from "@/contexts/UserContext";
 
 const XP_PER_LEVEL = 750; // should match backend computation
 
 export default function XPBar() {
-  const [loading, setLoading] = useState(true);
-  const [xpData, setXpData] = useState<{ xp: number; level: number } | null>(null);
-
-  const fetchXp = async () => {
-    try {
-      const res = await fetch("/api/xp", { credentials: "include" });
-      if (!res.ok) {
-        setXpData(null);
-        setLoading(false);
-        return;
-      }
-      const json = await res.json();
-      setXpData({ xp: Number(json.xp ?? 0), level: Number(json.level ?? 1) });
-    } catch (e) {
-      setXpData(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchXp();
-    const handler = () => fetchXp();
-    window.addEventListener("xp-updated", handler as EventListener);
-    return () => window.removeEventListener("xp-updated", handler as EventListener);
-  }, []);
+  const { user, loading, isAuthenticated } = useUser();
 
   if (loading) return <div className="ml-auto pr-4 text-white">Loading...</div>;
-  if (!xpData) return null;
+  if (!isAuthenticated || !user) return null;
 
-  const { xp, level } = xpData;
+  const { xp, level } = user;
   const currentLevelBase = (level - 1) * XP_PER_LEVEL;
   const nextLevelBase = level * XP_PER_LEVEL;
   const progressInLevel = Math.max(0, xp - currentLevelBase);

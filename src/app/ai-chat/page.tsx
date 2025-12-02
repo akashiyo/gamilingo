@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createGroq } from '@ai-sdk/groq';
 import { streamText } from 'ai';
 import Image from 'next/image';
+import { useUser } from "@/contexts/UserContext";
 
 const groq = createGroq({
   apiKey: "", // Setup your API key here
@@ -17,45 +18,36 @@ interface Message {
 
 export default function AiChatPage() {
   const router = useRouter();
+  const { user, isAuthenticated, loading } = useUser();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [streamingMessage, setStreamingMessage] = useState<string>("");
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [userId, setUserId] = useState<string | null>(null);
 
   // Check authentication and load chat history
   useEffect(() => {
-    const userStr = localStorage.getItem("user");
-    if (!userStr) {
+    if (loading) return;
+    
+    if (!isAuthenticated || !user) {
       router.push("/login");
       return;
     }
 
-    try {
-      const user = JSON.parse(userStr);
-      setUserId(user.id);
-      setIsAuthenticated(true);
-
-      // Load chat history from sessionStorage for this user
-      const chatKey = `ai-chat-${user.id}`;
-      const savedMessages = sessionStorage.getItem(chatKey);
-      if (savedMessages) {
-        setMessages(JSON.parse(savedMessages));
-      }
-    } catch (error) {
-      console.error("Error loading user data:", error);
-      router.push("/login");
+    // Load chat history from sessionStorage for this user
+    const chatKey = `ai-chat-${user.id}`;
+    const savedMessages = sessionStorage.getItem(chatKey);
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
     }
-  }, [router]);
+  }, [user, isAuthenticated, loading, router]);
 
   // Save messages to sessionStorage whenever they change
   useEffect(() => {
-    if (userId && messages.length > 0) {
-      const chatKey = `ai-chat-${userId}`;
+    if (user && messages.length > 0) {
+      const chatKey = `ai-chat-${user.id}`;
       sessionStorage.setItem(chatKey, JSON.stringify(messages));
     }
-  }, [messages, userId]);
+  }, [messages, user]);
 
   const handleSend = useCallback(async () => {
     if (!input.trim() || isLoading) return;
@@ -114,14 +106,14 @@ You should politely decline requests that are not related to English language le
   }, [input, messages, isLoading]);
 
   const handleClearChat = useCallback(() => {
-    if (userId) {
-      const chatKey = `ai-chat-${userId}`;
+    if (user) {
+      const chatKey = `ai-chat-${user.id}`;
       sessionStorage.removeItem(chatKey);
       setMessages([]);
     }
-  }, [userId]);
+  }, [user]);
 
-  if (!isAuthenticated) {
+  if (loading || !isAuthenticated) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p className="text-gray-500">Redirecting to login...</p>
