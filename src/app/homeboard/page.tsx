@@ -92,8 +92,6 @@ export default function HomeboardPage() {
         const lvl = Number(level);
         return (
           <div key={lvl} className="opacity-100 transition-all">
-            <h2 className="text-xl font-bold mb-4">{levelTitles[lvl] || `Level ${lvl}`}</h2>
-
             <div className={isLocked(lvl) ? "opacity-50 pointer-events-none" : ""}>
               <RoadmapStepper
                 steps={Object.values(steps)}

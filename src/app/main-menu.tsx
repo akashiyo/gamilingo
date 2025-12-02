@@ -13,7 +13,7 @@ const BottomNav = () => {
             label: 'Accueil',
             icon: '/home.svg',
             iconActive: '/home-select.svg',
-            path: '/'
+            path: '/homeboard'
         },
         {
             id: 'cards',
