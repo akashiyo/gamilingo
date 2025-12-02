@@ -38,10 +38,11 @@ model Dragon {
 }
 
 model UserWordStatus {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   userId    Int
   wordId    Int
-  known     Boolean
+  known     Boolean  @default(false)
+  wins      Int      @default(0)  // Number of games won mentioning this word (known=true at 3 wins)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
