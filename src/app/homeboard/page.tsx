@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import RoadmapStepper from "@/components/RoadmapStepper";
 
 interface StepData {
@@ -10,10 +11,20 @@ interface StepData {
 }
 
 export default function HomeboardPage() {
+  const router = useRouter();
   const [stepsByLevel, setStepsByLevel] = useState<Record<number, StepData[]>>({});
-  const [completedLevels, setCompletedLevels] = useState<number[]>([]);
+  const [completedLevels, setCompletedLevels] = useState<number[]>([1, 2]);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
+    // Check authentication
+    const userStr = localStorage.getItem("user");
+    if (!userStr) {
+      router.push("/login");
+      return;
+    }
+    setIsAuthenticated(true);
+
     const fetchWords = async () => {
       const res = await fetch("/api/words");
       const data = await res.json();
@@ -46,7 +57,7 @@ export default function HomeboardPage() {
     };
 
     fetchWords();
-  }, []);
+  }, [router]);
 
   // 🔐 Define titles and lock logic
   const levelTitles: Record<number, string> = {
@@ -65,6 +76,14 @@ export default function HomeboardPage() {
   const handleLevelComplete = (level: number) => {
     setCompletedLevels((prev) => Array.from(new Set([...prev, level])));
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-gray-500">Redirecting to login...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-12">

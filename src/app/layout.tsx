@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link"; // pour créer des liens entre pages
+import XPBar from "@/components/XPBar";
+import AuthHeader from "@/components/AuthHeader";
 import "./globals.css";
 import BottomNav from "@/app/main-menu";
 import UserHeader from "@/components/UserHeader";
@@ -32,35 +34,10 @@ export default function RootLayout({
       >
         {/* barre de navigation */}
         <header className="bg-gray-800 text-white p-4">
-          <nav className="flex gap-6">
-            <Link href="/" className="hover:underline">
-              Home
-            </Link>
-            <Link href="/words" className="hover:underline">
-              Words
-            </Link>
-            <Link href="/ai-chat" className="hover:underline">
-              AI Chat
-            </Link>
-            <Link href="/hangman" className="hover:underline">
-              Hangman
-            </Link>
-            <Link href="/memory" className="hover:underline">
-              Memory
-            </Link>
-            <Link href="/flashcards" className="hover:underline">
-              Flashcards
-            </Link>
-            <Link href="/login" className="hover:underline">
-              Login
-            </Link>
-            <Link href="/signup" className="hover:underline">
-              Sign-up
-            </Link>
-            <Link href="/profil" className="hover:underline">
-              Profil
-            </Link>
-          </nav>
+          <div className="container mx-auto flex items-center justify-between">
+            <AuthHeader />
+            <XPBar />
+          </div>
         </header>
         <header>
           <UserHeader/>

@@ -20,8 +20,17 @@ export default function GamesPage() {
   const theme = searchParams.get("theme") || "Unknown";
 
   const handleGameClick = (gameId: string) => {
-    // use `level` query param (frontend expects `level`) and preserve theme
-    router.push(`/games/${gameId}?level=${level}&theme=${encodeURIComponent(theme)}`);
+    // Route mapping:
+    // - flashcards is nested under /games/flashcards
+    // - memory and hangman live at top-level (/memory, /hangman)
+    const qs = `?level=${level}&theme=${encodeURIComponent(theme)}`;
+    if (gameId === "flashcards") {
+      router.push(`/games/flashcards${qs}`);
+      return;
+    }
+
+    // default: top-level route
+    router.push(`/${gameId}${qs}`);
   };
 
   return (

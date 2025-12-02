@@ -96,6 +96,28 @@ const Memory = () => {
         if (solved.length === cards.length && cards.length > 0) {
             setWon(true);
 
+            // award XP when the user wins this memory round
+            (async () => {
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    const theme = params.get("theme") || "Foods";
+                    const levelParam = Number(params.get("level") || difficulty || 1);
+
+                    const res = await fetch("/api/xp/award", {
+                        method: "POST",
+                        credentials: "include",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ game: "memory", level: levelParam, theme }),
+                    });
+
+                    if (res.ok) {
+                        window.dispatchEvent(new Event("xp-updated"));
+                    }
+                } catch (err) {
+                    console.error("Failed to award XP", err);
+                }
+            })();
+
             setTimeout(() => {
                 const curIndex = difficulties.indexOf(difficulty);
                 if (curIndex < difficulties.length - 1) {

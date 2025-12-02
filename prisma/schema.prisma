@@ -29,6 +29,7 @@ model User {
   img      Bytes?
   xp       Int    @default(0)
   wordStatus UserWordStatus[]
+  userAwards UserAward[]
 }
 
 model Dragon {
@@ -48,4 +49,19 @@ model UserWordStatus {
   word      Word     @relation(fields: [wordId], references: [id])
 
   @@unique([userId, wordId]) // Ensures one status per word per user
+}
+
+// Records XP awards to users for completing a specific game / level / theme
+model UserAward {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  game      String
+  level     Int
+  theme     String?
+  xp        Int
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, game, level, theme])
 }

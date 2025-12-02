@@ -1,0 +1,53 @@
+"use client";
+import React, { useEffect, useState } from "react";
+
+const XP_PER_LEVEL = 750; // should match backend computation
+
+export default function XPBar() {
+  const [loading, setLoading] = useState(true);
+  const [xpData, setXpData] = useState<{ xp: number; level: number } | null>(null);
+
+  const fetchXp = async () => {
+    try {
+      const res = await fetch("/api/xp", { credentials: "include" });
+      if (!res.ok) {
+        setXpData(null);
+        setLoading(false);
+        return;
+      }
+      const json = await res.json();
+      setXpData({ xp: Number(json.xp ?? 0), level: Number(json.level ?? 1) });
+    } catch (e) {
+      setXpData(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchXp();
+    const handler = () => fetchXp();
+    window.addEventListener("xp-updated", handler as EventListener);
+    return () => window.removeEventListener("xp-updated", handler as EventListener);
+  }, []);
+
+  if (loading) return <div className="ml-auto pr-4 text-white">Loading...</div>;
+  if (!xpData) return null;
+
+  const { xp, level } = xpData;
+  const currentLevelBase = (level - 1) * XP_PER_LEVEL;
+  const nextLevelBase = level * XP_PER_LEVEL;
+  const progressInLevel = Math.max(0, xp - currentLevelBase);
+  const toNext = Math.max(0, nextLevelBase - xp);
+  const percent = Math.max(0, Math.min(100, Math.round((progressInLevel / XP_PER_LEVEL) * 100)));
+
+  return (
+    <div className="ml-auto flex items-center gap-3 pr-4" aria-live="polite">
+      <div className="text-sm text-white">Lvl {level}</div>
+      <div className="w-48 bg-gray-600 rounded overflow-hidden h-4">
+        <div className="bg-emerald-400 h-4" style={{ width: `${percent}%` }} />
+      </div>
+      <div className="text-xs text-white opacity-90">{xp} XP · {toNext} to next</div>
+    </div>
+  );
+}

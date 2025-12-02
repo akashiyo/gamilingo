@@ -29,6 +29,7 @@ class Hangman extends Component {
         loading: true,
         error: null,
     };
+    awarded = false;
 
     async fetchRandomWord() {
         try {
@@ -215,3 +216,39 @@ class Hangman extends Component {
 }
 
 export default Hangman;
+
+// Award XP when the user wins. We check for victory and call the award endpoint once.
+// This module runs in the browser; we attach a small watcher to the class prototype.
+(function attachAwardWatcher() {
+    const originalRender = Hangman.prototype.render;
+
+    Hangman.prototype.render = function () {
+        const result = originalRender.apply(this, arguments);
+
+        try {
+            const isWinner = this.guessWord && this.answer && this.guessWord().join("") === this.state.answer;
+            if (isWinner && !this.awarded) {
+                this.awarded = true;
+                // determine level and theme from URL
+                const params = new URLSearchParams(window.location.search);
+                const level = Number(params.get("level") || 1);
+                const theme = params.get("theme") || "Foods";
+
+                fetch("/api/xp/award", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ game: "hangman", level, theme }),
+                })
+                    .then((res) => {
+                        if (res.ok) window.dispatchEvent(new Event("xp-updated"));
+                    })
+                    .catch((err) => console.error("award xp error", err));
+            }
+        } catch (e) {
+            // ignore
+        }
+
+        return result;
+    };
+})();
