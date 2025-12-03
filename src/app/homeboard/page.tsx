@@ -15,8 +15,6 @@ export default function HomeboardPage() {
   const router = useRouter();
   const { user, isAuthenticated, loading } = useUser();
   const [stepsByLevel, setStepsByLevel] = useState<Record<number, StepData[]>>({});
-  const [completedLevels, setCompletedLevels] = useState<number[]>([1, 2]);
-
   useEffect(() => {
     if (loading) return;
     
@@ -60,23 +58,16 @@ export default function HomeboardPage() {
     fetchWords();
   }, [user, isAuthenticated, loading, router]);
 
-  // 🔐 Define titles and lock logic
+  // 🔐 Define titles for each level
   const levelTitles: Record<number, string> = {
     1: "Road to A1",
     2: "Road to A2",
     3: "Road to B1",
   };
 
-  // Helper: check if a level is locked
-  const isLocked = (level: number) => {
-    if (level === 1) return false; // Level 1 always unlocked
-    return !completedLevels.includes(level - 1); // locked if previous level not done
-  };
-
-  // Simulate marking a level completed (you can later replace this with real progress)
-  const handleLevelComplete = (level: number) => {
-    setCompletedLevels((prev) => Array.from(new Set([...prev, level])));
-  };
+  // Get user's current level and XP (default to 1 and 0)
+  const userLevel = user?.level || 1;
+  const userXp = user?.xp || 0;
 
   if (loading || !isAuthenticated) {
     return (
@@ -87,24 +78,23 @@ export default function HomeboardPage() {
   }
 
   return (
-    <div className="p-6 space-y-12">
+    <div className="p-6 space-y-12 min-h-screen" style={{ backgroundColor: "var(--medium-purple)" }}>
       {Object.entries(stepsByLevel).map(([level, steps]) => {
         const lvl = Number(level);
+        const isLevelLocked = userLevel < lvl;
         return (
           <div key={lvl} className="opacity-100 transition-all">
-            <div className={isLocked(lvl) ? "opacity-50 pointer-events-none" : ""}>
-              <RoadmapStepper
-                steps={Object.values(steps)}
-                locked={isLocked(lvl)}
-                title={levelTitles[lvl]}
-                level={lvl} 
-                onComplete={() => handleLevelComplete(lvl)}
-              />
-            </div>
+            <RoadmapStepper
+              steps={Object.values(steps)}
+              title={levelTitles[lvl]}
+              level={lvl}
+              userLevel={userLevel}
+              userXp={userXp}
+            />
 
-            {isLocked(lvl) && (
+            {isLevelLocked && (
               <p className="text-sm text-gray-500 italic mt-2">
-                🔒 Unlocks after completing Level {lvl - 1}
+                🔒 Reach Level {lvl} to unlock these steps
               </p>
             )}
           </div>

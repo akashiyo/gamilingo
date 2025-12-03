@@ -2,7 +2,7 @@
 import React from "react";
 import { useUser } from "@/contexts/UserContext";
 
-const XP_PER_LEVEL = 750; // should match backend computation
+const XP_PER_LEVEL = 500; // should match backend computation
 
 export default function XPBar() {
   const { user, loading, isAuthenticated } = useUser();

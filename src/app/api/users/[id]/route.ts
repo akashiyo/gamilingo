@@ -1,15 +1,14 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
 
 //
 // GET one user
 //
-export const GET = async (_req, { params }) => {
+export const GET = async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
   try {
+    const { id } = await params;
     const user = await prisma.user.findUnique({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
     });
 
     if (!user) {
@@ -29,8 +28,9 @@ export const GET = async (_req, { params }) => {
       },
     });
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-        { msg: "Failed to retrieve the user", error: error.message },
+        { msg: "Failed to retrieve the user", error: errorMessage },
         { status: 500 }
     );
   }
@@ -40,23 +40,24 @@ export const GET = async (_req, { params }) => {
 //
 // PUT (update user) ✅ VERSION CORRIGÉE POUR FORM DATA
 //
-export const PUT = async (req, { params }) => {
+export const PUT = async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
   try {
+    const { id } = await params;
     const formData = await req.formData();
 
-    const name = formData.get("name");
-    const username = formData.get("username");
-    const email = formData.get("email");
-    const imageFile = formData.get("img");
+    const name = formData.get("name") as string | null;
+    const username = formData.get("username") as string | null;
+    const email = formData.get("email") as string | null;
+    const imageFile = formData.get("img") as File | null;
 
-    let imgBuffer = undefined;
+    let imgBuffer: Buffer | undefined = undefined;
     if (imageFile && typeof imageFile.arrayBuffer === "function") {
       const arrayBuffer = await imageFile.arrayBuffer();
       imgBuffer = Buffer.from(arrayBuffer);
     }
 
     const updatedUser = await prisma.user.update({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       data: {
         name: name || undefined,
         username: username || undefined,
@@ -66,13 +67,14 @@ export const PUT = async (req, { params }) => {
     });
 
     return NextResponse.json({
-      msg: `User ${params.id} updated successfully`,
+      msg: `User ${id} updated successfully`,
       user: updatedUser,
     });
   } catch (error) {
     console.error("Erreur PUT user :", error);
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-        { msg: "Failed to update the user", error: error.message },
+        { msg: "Failed to update the user", error: errorMessage },
         { status: 500 }
     );
   }
@@ -81,18 +83,20 @@ export const PUT = async (req, { params }) => {
 //
 // DELETE (remove user)
 //
-export const DELETE = async (_req, { params }) => {
+export const DELETE = async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
   try {
+    const { id } = await params;
     await prisma.user.delete({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
     });
 
     return NextResponse.json({
-      msg: `User with id ${params.id} deleted successfully`,
+      msg: `User with id ${id} deleted successfully`,
     });
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-        { msg: "Failed to delete the user", error: error.message },
+        { msg: "Failed to delete the user", error: errorMessage },
         { status: 500 }
     );
   }

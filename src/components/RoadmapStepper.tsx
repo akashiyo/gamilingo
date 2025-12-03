@@ -18,8 +18,14 @@ interface RoadmapStepperProps {
   title?: string;
   locked?: boolean;
   onComplete?: () => void;
-  level?: number; 
+  level?: number;
+  userLevel?: number; // The user's current level - determines if steps are accessible
+  userXp?: number; // The user's total XP - determines how many steps are unlocked (1 step per 100 XP)
 }
+
+// XP thresholds per level (each level starts fresh)
+const XP_PER_LEVEL = 500; // 500 XP to level up
+const XP_PER_STEP = 100; // 1 step unlocked per 100 XP within the level
 
 export default function RoadmapStepper({
   steps,
@@ -27,16 +33,29 @@ export default function RoadmapStepper({
   level = 1,
   locked,
   onComplete,
+  userLevel = 1,
+  userXp = 0,
 }: RoadmapStepperProps) {
   const router = useRouter();
   const [progress, setProgress] = useState(steps.map((s) => s.isCompleted || false));
 
+  // User can access this level's steps only if their level >= this stepper's level
+  const hasLevelAccess = userLevel >= level;
+
+  // Calculate XP within this level to determine unlocked steps
+  // For level 1: XP from 0-749, for level 2: XP from 750-1499, etc.
+  const levelStartXp = (level - 1) * XP_PER_LEVEL;
+  const xpInThisLevel = Math.max(0, userXp - levelStartXp);
+  // Number of steps unlocked based on XP (1 step per 100 XP, minimum 1 if has access)
+  const stepsUnlockedByXp = hasLevelAccess ? Math.max(1, Math.floor(xpInThisLevel / XP_PER_STEP) + 1) : 0;
+
   const handleStepClick = (index: number) => {
-    const isUnlocked = index === 0 || progress[index - 1];
+    // Use same XP-based unlock logic as rendering
+    const isUnlocked = hasLevelAccess && index < stepsUnlockedByXp;
     if (!isUnlocked) return;
 
     const step = steps[index];
-    router.push(`/games?category=${level}&theme=${encodeURIComponent(step.title)}`);
+    router.push(`/games?level=${level}&theme=${encodeURIComponent(step.title)}`);
   };
 
 
@@ -50,9 +69,10 @@ export default function RoadmapStepper({
     <div className="max-w-md mx-auto">
       <h2 className="text-xl font-semibold mb-4 text-gray-800">{title}</h2>
 
-      <div className="relative border-l-2 border-dashed border-gray-300 pl-6">
+      <div className="relative border-l-2 border-dashed border-gray-400 pl-6">
         {steps.map((step, index) => {
-          const isUnlocked = index === 0 || progress[index - 1];
+          // Step is unlocked if user has level access AND step index < number of steps unlocked by XP
+          const isUnlocked = hasLevelAccess && index < stepsUnlockedByXp;
           const isDone = progress[index];
 
           return (

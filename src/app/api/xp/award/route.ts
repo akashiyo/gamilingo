@@ -7,14 +7,12 @@ const SECRET = process.env.JWT_SECRET || "default_secret_key";
 // XP config
 const XP_PER_GAME = 50; // fixed per requirements
 
-// compute thresholds based on 5 themes per level, 3 games per theme
-const THEMES_PER_LEVEL = 5;
-const GAMES_PER_THEME = 3;
-const XP_PER_LEVEL = THEMES_PER_LEVEL * GAMES_PER_THEME * XP_PER_GAME; // 5*3*50 = 750
+// XP thresholds: 500 XP per level
+const XP_PER_LEVEL = 500;
 
 function computeLevelFromXp(xp: number) {
-  if (xp >= XP_PER_LEVEL * 2) return 3; // >=1500
-  if (xp >= XP_PER_LEVEL * 1) return 2; // >=750
+  if (xp >= XP_PER_LEVEL * 2) return 3; // >=1000
+  if (xp >= XP_PER_LEVEL * 1) return 2; // >=500
   return 1;
 }
 

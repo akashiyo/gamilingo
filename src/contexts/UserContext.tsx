@@ -114,6 +114,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [fetchUserData]);
 
   // Set user and persist to localStorage
+  // Note: This does NOT dispatch events internally to avoid loops
+  // External code should dispatch events if needed after calling setUser
   const setUser = useCallback((newUser: User | null) => {
     setUserState(newUser);
     if (newUser) {
@@ -121,9 +123,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } else {
       localStorage.removeItem("user");
     }
-    // Dispatch events for backward compatibility
-    window.dispatchEvent(new Event("user-updated"));
-    window.dispatchEvent(new Event("xp-updated"));
   }, []);
 
   // Refresh user data from API
@@ -132,7 +131,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(freshUser);
   }, [fetchUserData, setUser]);
 
-  // Update XP values without full refresh
+  // Update XP values without full refresh (does NOT dispatch events to avoid loops)
   const updateXP = useCallback((xp: number, level: number) => {
     setUserState((prev) => {
       if (!prev) return null;
@@ -140,7 +139,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem("user", JSON.stringify(updated));
       return updated;
     });
-    window.dispatchEvent(new Event("xp-updated"));
+    // Note: Do NOT dispatch "xp-updated" here - this would cause an infinite loop
+    // since the event listener calls updateXP which would dispatch again
   }, []);
 
   // Logout function

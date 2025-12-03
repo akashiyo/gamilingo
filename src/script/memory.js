@@ -11,6 +11,7 @@ const Memory = () => {
     const [disabled, setDisabled] = useState(false);
     const [won, setWon] = useState(false);
     const [difficulty, setDifficulty] = useState(1);
+    const [gameCompleted, setGameCompleted] = useState(false);
 
     const TOTAL_CARDS = 12;
     const PAIR_COUNT = TOTAL_CARDS / 2;
@@ -22,10 +23,11 @@ const Memory = () => {
         }
     };
 
-    const fetchWords = async (categoryNumber) => {
+    const fetchWords = async (categoryNumber, theme) => {
         try {
-            const res = await fetch(`/api/words?theme=Foods&category=${categoryNumber}`);
+            const res = await fetch(`/api/words?theme=${encodeURIComponent(theme)}&category=${categoryNumber}`);
             const data = await res.json();
+            console.log("🎮 Memory fetching words for theme:", theme, "- received:", data.words?.length || 0, "words");
             return data.words || [];
         } catch (err) {
             console.error("Erreur fetch words", err);
@@ -34,7 +36,12 @@ const Memory = () => {
     };
 
     const initializeGame = async () => {
-        const words = await fetchWords(difficulty);
+        // Read theme from URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const theme = params.get("theme") || "Foods";
+        console.log("🎯 Memory URL params - theme:", theme, ", difficulty:", difficulty);
+        
+        const words = await fetchWords(difficulty, theme);
         if (!words || words.length === 0) {
             setCards([]);
             return;
@@ -69,6 +76,14 @@ const Memory = () => {
             setSolved((s) => [...s, firstIdx, secondIdx]);
             setFlipped([]);
             setDisabled(false);
+
+            // Record word win for progress tracking
+            fetch("/api/knownwords/v2", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ wordId: first.wordId }),
+            }).catch((err) => console.error("record word win error", err));
         } else {
             setTimeout(() => {
                 setFlipped([]);
@@ -93,7 +108,7 @@ const Memory = () => {
     const isSolved = (idx) => solved.includes(idx);
 
     useEffect(() => {
-        if (solved.length === cards.length && cards.length > 0) {
+        if (solved.length === cards.length && cards.length > 0 && !won) {
             setWon(true);
 
             // award XP when the user wins this memory round
@@ -107,7 +122,7 @@ const Memory = () => {
                         method: "POST",
                         credentials: "include",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ game: "memory", level: levelParam, theme }),
+                        body: JSON.stringify({ game: "memory", level: levelParam, theme, xp: 50 }),
                     });
 
                     if (res.ok) {
@@ -118,19 +133,56 @@ const Memory = () => {
                 }
             })();
 
+            const currentDifficulty = difficulty;
             setTimeout(() => {
-                const curIndex = difficulties.indexOf(difficulty);
+                const curIndex = difficulties.indexOf(currentDifficulty);
                 if (curIndex < difficulties.length - 1) {
                     const next = difficulties[curIndex + 1];
                     setDifficulty(next);
                 } else {
-                    initializeGame();
+                    // All levels completed - show final victory!
+                    setGameCompleted(true);
                 }
             }, 1500);
         }
-    }, [solved, cards, difficulty]);
+    }, [solved, cards]);
+
+    const restartGame = () => {
+        setGameCompleted(false);
+        setDifficulty(1);
+        setWon(false);
+    };
 
     const gridTemplate = `repeat(${gridCols}, minmax(0, 1fr))`;
+
+    // Show final victory screen when all levels are completed
+    if (gameCompleted) {
+        return (
+            <div
+                className="flex flex-col items-center justify-center min-h-screen p-4 md:p-8"
+                style={{backgroundColor: "rgba(224, 211, 239, 1)"}}
+            >
+                <div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl text-center max-w-md">
+                    <div className="text-6xl mb-4">🏆</div>
+                    <h1 className="text-3xl md:text-4xl font-bold mb-4" style={{color: "rgba(122, 74, 156, 1)"}}>
+                        Félicitations !
+                    </h1>
+                    <p className="text-lg md:text-xl text-gray-600 mb-6">
+                        Tu as terminé tous les niveaux du Memory ! 🎉
+                    </p>
+                    <p className="text-md text-green-600 font-semibold mb-6">
+                        +100 XP gagnés !
+                    </p>
+                    <button
+                        onClick={restartGame}
+                        className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+                    >
+                        Rejouer
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div

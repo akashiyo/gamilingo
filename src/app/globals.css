@@ -52,8 +52,37 @@ button{
 
 .user-header-left {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  gap: 10px;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.back-button:active {
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.user-header-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 }
 
 .user-header-avatar {
@@ -64,7 +93,6 @@ button{
 }
 
 .user-header-username {
-  margin-top: 5px;
   font-size: 14px;
   font-weight: 600;
   color: #222;
