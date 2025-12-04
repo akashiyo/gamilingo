@@ -84,11 +84,18 @@
 .top-top_3{
     width: 94%;
     top: 76%;
-    left: 50.25%;
+    left: 50.5%;
 }
 .top-top_4{
     width: 200%;
     top: 75%;
+    left: 51%;
+}
+
+.hat-hat_2{
+    z-index: 0;
+    width: 200%;
+    top: -20%;
     left: 51%;
 }
 /* Barre des catégories */
@@ -193,4 +200,39 @@
 
 .avatar-layer.top {
     z-index: 6;
+}
+.option-btn {
+    background: #555;
+    border-radius: 12px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .2s;
+    border: 2px solid transparent;
+}
+
+.option-btn:hover {
+    background: #666;
+}
+
+.option-selected {
+    border: 3px solid black;
+    transform: scale(1.06);
+    background: #777;
+}
+.validate-btn {
+    margin-top: 12px;
+    width: 90%;
+    padding: 12px;
+    background: #4f46e5;
+    color: white;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: .2s;
+}
+
+.validate-btn:hover {
+    background: #4338ca;
 }

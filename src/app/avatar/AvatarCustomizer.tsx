@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useUser } from "@/contexts/UserContext";   // <-- IMPORT USER
 import "./AvatarCustomizer.css";
 
 const categories = [
@@ -17,41 +18,67 @@ const options: Record<string, string[]> = {
     mouth: ["mouth_1", "mouth_2", "mouth_3", "mouth_4", "mouth_5"],
     hair: ["hair_1", "hair_2"],
     top: ["top_1", "top_2", "top_3", "top_4"],
-    hat: ["hat_1", "hat_2", "hat_3", "hat_4"],  // <-- none pour enlever le chapeau
+    hat: ["hat_1", "hat_2", "hat_3", "hat_4"],
     ears: ["ears_1", "ears_2", "ears_3", "ears_4"],
 };
 
 export default function AvatarCustomizer() {
+    const { user } = useUser();   // <-- USER CONNECTÉ
+
     const [selectedCategory, setSelectedCategory] = useState("eyes");
 
     const [avatar, setAvatar] = useState({
         eyes: "eyes_1",
         mouth: "mouth_1",
         hair: "hair_1",
-        hat: "none",   // <-- pas de chapeau par défaut
+        hat: "none",
         top: "top_1",
         ears: "ears_1",
     });
 
+    async function saveAvatar() {
+        if (!user) {
+            alert("Utilisateur non connecté !");
+            return;
+        }
+
+        const res = await fetch("/api/avatar/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                userId: user.id,
+                ...avatar
+            }),
+        });
+
+        if (res.ok) {
+            alert("Avatar enregistré !");
+        } else {
+            alert("Erreur lors de l’enregistrement.");
+        }
+    }
+
     return (
         <div className="avatar-container">
-
             {/* Aperçu */}
             <div className="avatar-preview-bg">
                 <div className="avatar-preview">
-
                     <img src={`/images/avatar/eyes/${avatar.eyes}.svg`} className="eyes"/>
-
                     <img src={`/images/avatar/mouth/${avatar.mouth}.svg`} className="mouth"/>
                     <img src={`/images/avatar/ears/${avatar.ears}.svg`} className="ears"/>
                     <img src={`/images/avatar/hair/${avatar.hair}.svg`} className="hair"/>
 
-                    {/* On n'affiche le chapeau que si ≠ none */}
                     {avatar.hat !== "none" && (
-                        <img src={`/images/avatar/hat/${avatar.hat}.svg`} className="hat"/>
+                        <img
+                            src={`/images/avatar/hat/${avatar.hat}.svg`}
+                            className={`hat hat-${avatar.hat}`}
+                        />
                     )}
 
-                    <img src={`/images/avatar/top/${avatar.top}.svg`}   className={`top top-${avatar.top}`}/>
+                    <img
+                        src={`/images/avatar/top/${avatar.top}.svg`}
+                        className={`top top-${avatar.top}`}
+                    />
                 </div>
             </div>
 
@@ -63,7 +90,7 @@ export default function AvatarCustomizer() {
                         className={selectedCategory === cat.key ? "category-btn active" : "category-btn"}
                         onClick={() => setSelectedCategory(cat.key)}
                     >
-                        <img src={cat.icon} className="category-icon" />
+                        <img src={cat.icon} className="category-icon"/>
                     </button>
                 ))}
             </div>
@@ -73,8 +100,14 @@ export default function AvatarCustomizer() {
                 {options[selectedCategory].map((opt) => (
                     <button
                         key={opt}
-                        className="option-btn"
-                        onClick={() => setAvatar((prev) => ({ ...prev, [selectedCategory]: opt }))}
+                        className={
+                            avatar[selectedCategory] === opt
+                                ? "option-btn option-selected"
+                                : "option-btn"
+                        }
+                        onClick={() =>
+                            setAvatar((prev) => ({ ...prev, [selectedCategory]: opt }))
+                        }
                     >
                         <img
                             src={`/images/avatar/${selectedCategory}/${opt}.svg`}
@@ -84,6 +117,9 @@ export default function AvatarCustomizer() {
                 ))}
             </div>
 
+            <button className="validate-btn" onClick={saveAvatar}>
+                Valider mon avatar
+            </button>
         </div>
     );
 }
