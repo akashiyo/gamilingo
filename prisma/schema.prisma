@@ -30,6 +30,8 @@ model User {
   xp       Int    @default(0)
   wordStatus UserWordStatus[]
   userAwards UserAward[]
+
+  avatar     Avatar?
 }
 
 model Dragon {
@@ -65,4 +67,17 @@ model UserAward {
   user      User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, game, level, theme])
+}
+
+model Avatar {
+  id       Int    @id @default(autoincrement())
+  eyes     String
+  mouth    String
+  ears     String
+  hair     String
+  hat      String?
+  top      String
+
+  user     User   @relation(fields: [userId], references: [id])
+  userId   Int    @unique
 }

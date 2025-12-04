@@ -1,0 +1,196 @@
+.avatar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 420px;
+    width: 100%;
+    margin: 0 auto;
+    background: #f3f3f3;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.avatar-preview-bg {
+    width: 100%;
+    background: #e6d6fa;
+    padding: 24px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.avatar-preview {
+    width: 160px;
+    height: 160px;
+    position: relative;
+}
+
+/* Positionnement des layers */
+.avatar-preview img {
+  margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}
+
+
+.eyes {z-index: 2;
+    width: 53px;
+    position: absolute;
+    top: 43%;
+    left: 50%;
+    transform: translateX(-50%);}
+.mouth { z-index: 2;
+    width: 32px;
+    position: absolute;
+    top: 63%;
+    left: 50%;
+    transform: translateX(-50%);}
+.hair { width: 96px;
+    top: 13%;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);}
+.hat { z-index: 2;
+    width: 108px;
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-50%); }
+.top { width: 132px;
+    bottom: 0;
+    position: absolute;
+    left: 49.5%;
+    transform: translateX(-50%);
+    top: 81%; z-index: 1 }
+.ears{
+    z-index: 1;
+    width: 109px;
+    position: absolute;
+    top: 28%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.top_1{
+
+}
+
+.top-top_2{
+    width: 200%;
+    top: 36%;
+    left: 23.5%;
+    transform: scale(1.5);
+}
+.top-top_3{
+    width: 94%;
+    top: 76%;
+    left: 50.25%;
+}
+.top-top_4{
+    width: 200%;
+    top: 75%;
+    left: 51%;
+}
+/* Barre des catégories */
+.category-bar {
+    width: 100%;
+    background: #2e2e2e;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    z-index: 10;
+}
+
+.category-btn {
+    background: transparent;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.category-btn.active {
+    transform: scale(1.4);
+}
+
+.category-icon {
+    opacity: .9;
+    width: 76px;
+    height: 35px;
+    background: #999;
+    border-radius: 12px;
+    padding: 6px;
+}
+
+
+/* Grille d'options */
+.options-grid {
+    width: 100%;
+    background: #3a3a3a;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    z-index: 10;
+}
+
+.option-btn {
+    background: #606060;
+    height: 80px;
+    border-radius: 12px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.option-btn:hover {
+    background: #7a7a7a;
+}
+
+.option-img {
+    width: 60px;
+    height: 60px;
+}
+
+.avatar-preview-container {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: 0 auto;
+}
+
+.avatar-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 260px;
+    pointer-events: none; /* pour ne pas bloquer les clics */
+}
+
+/* Exemple : si certains éléments doivent être plus petits */
+.avatar-layer.hair {
+    z-index: 1;
+}
+
+.avatar-layer.ears {
+    z-index: 2;
+}
+
+.avatar-layer.eyes {
+    z-index: 3;
+}
+
+.avatar-layer.mouth {
+    z-index: 4;
+}
+
+.avatar-layer.hat {
+    z-index: 5;
+}
+
+.avatar-layer.top {
+    z-index: 6;
+}
