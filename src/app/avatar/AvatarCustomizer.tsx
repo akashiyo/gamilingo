@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useUser } from "@/contexts/UserContext";   // <-- IMPORT USER
+import {useEffect, useState} from "react";
+import { useUser } from "@/contexts/UserContext";
 import "./AvatarCustomizer.css";
+import { useRouter } from "next/navigation";
+
 
 const categories = [
     { key: "eyes", icon: "/images/avatar/menu/eyes.svg" },
@@ -24,6 +26,7 @@ const options: Record<string, string[]> = {
 
 export default function AvatarCustomizer() {
     const { user } = useUser();   // <-- USER CONNECTÉ
+    const router = useRouter();
 
     const [selectedCategory, setSelectedCategory] = useState("eyes");
 
@@ -53,10 +56,33 @@ export default function AvatarCustomizer() {
 
         if (res.ok) {
             alert("Avatar enregistré !");
+
+            // 🔥 Redirection vers la page profil
+            router.push("/profil");
+
         } else {
             alert("Erreur lors de l’enregistrement.");
         }
     }
+
+    useEffect(() => {
+        async function loadAvatar() {
+            const storedUser = localStorage.getItem("user");
+            if (!storedUser) return;
+
+            const userId = JSON.parse(storedUser).id;
+
+            const res = await fetch(`/api/avatar/${userId}`);
+            if (!res.ok) return; // pas encore d'avatar
+
+            const data = await res.json();
+            if (data.avatar) {
+                setAvatar(data.avatar);
+            }
+        }
+
+        loadAvatar();
+    }, []);
 
     return (
         <div className="avatar-container">
@@ -118,8 +144,10 @@ export default function AvatarCustomizer() {
             </div>
 
             <button className="validate-btn" onClick={saveAvatar}>
+
                 Valider mon avatar
             </button>
+
         </div>
     );
 }

@@ -2,11 +2,16 @@
 
 import { useEffect, useState } from "react";
 import "../app/profil/profil.css";
+import AvatarMini from "@/components/AvatarMini";
+import { useRouter } from "next/navigation";
+import AvatarMiniPreview from "@/components/AvatarMini";
+
 
 export default function Profil() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState(null);
+    const router = useRouter();
 
     const [formData, setFormData] = useState({
         name: "",
@@ -74,19 +79,14 @@ export default function Profil() {
 
             {/* Avatar cliquable pour changer l'image */}
             <div className="profile-header">
-                <label htmlFor="avatar-upload">
-                    <img
-                        src={
-                            selectedImage
-                                ? URL.createObjectURL(selectedImage)
-                                : user.img && user.img.data
-                                    ? `data:image/png;base64,${Buffer.from(user.img.data).toString("base64")}`
-                                    : "/profil.svg"
-                        }
-                        alt="Profil"
-                        className="profile-avatar cursor-pointer"
-                    />
-                </label>
+                <div onClick={() => router.push("/avatar")}>
+                    {user.avatar ? (
+                        <AvatarMini avatar={user.avatar}/>
+                    ) : (
+                        <img src="/profil.svg" className="profile-avatar cursor-pointer"/>
+                    )}
+                </div>
+
 
                 <input
                     id="avatar-upload"

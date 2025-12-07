@@ -1,48 +1,55 @@
-import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 
-//
-// GET one user
-//
-export const GET = async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
+/* ----------------------- GET one user ----------------------- */
+export async function GET(
+    _req: Request,
+    { params }: { params: { id: string } }
+) {
   try {
-    const { id } = await params;
+    const id = Number(params.id);
+
     const user = await prisma.user.findUnique({
-      where: { id: Number(id) },
+      where: { id },
+      include: { avatar: true }, // on récupère aussi l'avatar
     });
 
     if (!user) {
       return NextResponse.json({ msg: "User not found" }, { status: 404 });
     }
 
-    // Convertir l'image en Base64 si elle existe
-    let imageBase64 = null;
-    if (user.img) {
-      imageBase64 = Buffer.from(user.img).toString("base64");
-    }
+    // ne jamais renvoyer un Buffer brut dans du JSON
+    const imgBase64 = user.img ? Buffer.from(user.img).toString("base64") : null;
 
     return NextResponse.json({
       user: {
-        ...user,
-        img: imageBase64, // en Base64, plus propre !
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        level: user.level,
+        role: user.role,
+        xp: user.xp,
+        avatar: user.avatar ?? null,
+        img: imgBase64, // string base64 ou null
       },
     });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const msg = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-        { msg: "Failed to retrieve the user", error: errorMessage },
+        { msg: "Failed to retrieve the user", error: msg },
         { status: 500 }
     );
   }
-};
+}
 
-
-//
-// PUT (update user) ✅ VERSION CORRIGÉE POUR FORM DATA
-//
-export const PUT = async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
+/* ----------------------- PUT (update user) ----------------------- */
+export async function PUT(
+    req: Request,
+    { params }: { params: { id: string } }
+) {
   try {
-    const { id } = await params;
+    const id = Number(params.id);
     const formData = await req.formData();
 
     const name = formData.get("name") as string | null;
@@ -50,54 +57,64 @@ export const PUT = async (req: Request, { params }: { params: Promise<{ id: stri
     const email = formData.get("email") as string | null;
     const imageFile = formData.get("img") as File | null;
 
-    let imgBuffer: Buffer | undefined = undefined;
+    let imgBuffer: Buffer | undefined;
     if (imageFile && typeof imageFile.arrayBuffer === "function") {
-      const arrayBuffer = await imageFile.arrayBuffer();
-      imgBuffer = Buffer.from(arrayBuffer);
+      imgBuffer = Buffer.from(await imageFile.arrayBuffer());
     }
 
-    const updatedUser = await prisma.user.update({
-      where: { id: Number(id) },
+    const updated = await prisma.user.update({
+      where: { id },
       data: {
         name: name || undefined,
         username: username || undefined,
         email: email || undefined,
         ...(imgBuffer && { img: imgBuffer }),
       },
+      include: { avatar: true },
     });
+
+    const imgBase64 = updated.img
+        ? Buffer.from(updated.img).toString("base64")
+        : null;
 
     return NextResponse.json({
       msg: `User ${id} updated successfully`,
-      user: updatedUser,
+      user: {
+        id: updated.id,
+        name: updated.name,
+        username: updated.username,
+        email: updated.email,
+        level: updated.level,
+        role: updated.role,
+        xp: updated.xp,
+        avatar: updated.avatar ?? null,
+        img: imgBase64,
+      },
     });
   } catch (error) {
-    console.error("Erreur PUT user :", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const msg = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-        { msg: "Failed to update the user", error: errorMessage },
+        { msg: "Failed to update the user", error: msg },
         { status: 500 }
     );
   }
-};
+}
 
-//
-// DELETE (remove user)
-//
-export const DELETE = async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
+/* ----------------------- DELETE (remove user) ----------------------- */
+export async function DELETE(
+    _req: Request,
+    { params }: { params: { id: string } }
+) {
   try {
-    const { id } = await params;
-    await prisma.user.delete({
-      where: { id: Number(id) },
-    });
+    const id = Number(params.id);
+    await prisma.user.delete({ where: { id } });
 
-    return NextResponse.json({
-      msg: `User with id ${id} deleted successfully`,
-    });
+    return NextResponse.json({ msg: `User ${id} deleted successfully` });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const msg = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-        { msg: "Failed to delete the user", error: errorMessage },
+        { msg: "Failed to delete the user", error: msg },
         { status: 500 }
     );
   }
-};
+}

@@ -1,0 +1,91 @@
+/* Conteneur mini-avatar */
+.mini-avatar-box {
+    position: relative;
+    width: 70px;      /* taille mini */
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #e6d6fa;
+}
+
+/* Style général */
+.mini-avatar-box img {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+/* ---- EYES ---- */
+.mini-eyes {
+    z-index: 3;
+    width: calc(53px * 0.45);
+    top: 43%;
+}
+
+/* ---- MOUTH ---- */
+.mini-mouth {
+    z-index: 4;
+    width: calc(32px * 0.45);
+    top: 63%;
+}
+
+/* ---- EARS ---- */
+.mini-ears {
+    z-index: 1;
+    width: calc(109px * 0.45);
+    top: 28%;
+}
+
+/* ---- HAIR ---- */
+.mini-hair {
+    z-index: 1;
+    width: calc(96px * 0.45);
+    top: 13%;
+}
+
+/* ---- HAT (base) ---- */
+.mini-hat {
+    z-index: 5;
+    width: calc(108px * 0.45);
+    top: -2px;
+}
+
+/* ---- TOP (base) ---- */
+.mini-top {
+    z-index: 3;
+    width: 59.4px;
+    top: 85%;
+}
+
+/* --------------------------------------------- */
+/*             VARIANTES SPÉCIALES               */
+/*  Même logique que ton grand avatar, mais mini */
+/* --------------------------------------------- */
+
+/* TOP 2 */
+.mini-top-top_2 {
+    top: 46%;
+    left: 30% !important;
+    transform: scale(1.7) !important;
+}
+
+/* TOP 3 */
+.mini-top-top_3 {
+    width: 97.3%;
+    top: 79.9%;
+    z-index: 3;
+}
+
+/* TOP 4 */
+.mini-top-top_4 {
+    width: 130%;
+    top: 75%;
+}
+
+/* HAT 2 */
+.mini-hat-hat_2 {
+    z-index: 0;
+    width: calc(200% * 0.45);
+    top: -20%;
+}

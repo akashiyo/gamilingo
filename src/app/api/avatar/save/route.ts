@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+
 export async function POST(req: Request) {
     try {
         const body = await req.json();
@@ -27,4 +28,17 @@ export async function POST(req: Request) {
         console.error(err);
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
+
+}
+export async function GET(
+    req: Request,
+    { params }: { params: { userId: string } }
+) {
+    const userId = Number(params.userId);
+
+    const avatar = await prisma.avatar.findUnique({
+        where: { userId }
+    });
+
+    return NextResponse.json({ avatar });
 }

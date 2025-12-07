@@ -4,19 +4,24 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "@/contexts/UserContext";
 import XPBar from "@/components/XPBar";
+import AvatarMini from "@/components/AvatarMini";
 
 export default function UserHeader() {
     const router = useRouter();
     const pathname = usePathname();
-    const { user, isAuthenticated } = useUser();
 
     const isHomeboard = pathname === "/homeboard";
 
+    const { user, isAuthenticated, loading } = useUser();
+
+    if (loading) return null;
     if (!isAuthenticated || !user) return null;
 
     return (
         <div className="user-header-container">
             <div className="user-header-left">
+
+                {/* BOUTON RETOUR */}
                 {!isHomeboard && (
                     <button
                         onClick={() => router.back()}
@@ -33,19 +38,16 @@ export default function UserHeader() {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                         >
-                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
                         </svg>
                     </button>
                 )}
-                <img
-                    src={
-                        user.img
-                            ? `data:image/png;base64,${user.img}`
-                            : "/profil.svg"
-                    }
-                    alt="profil"
-                    className="user-header-avatar"
-                />
+
+                {/* ⭐ AVATAR MINI (version identique à la page profil) ⭐ */}
+                <div onClick={() => router.push("/avatar")} className="cursor-pointer">
+                        <AvatarMini avatar={user.avatar} />
+
+                </div>
 
                 <span className="user-header-username">{user.username}</span>
             </div>

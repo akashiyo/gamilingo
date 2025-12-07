@@ -8,6 +8,8 @@ import BottomNav from "@/app/main-menu";
 import UserHeader from "@/components/UserHeader";
 import { UserProvider } from "@/contexts/UserContext";
 
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
