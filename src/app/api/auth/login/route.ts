@@ -24,9 +24,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ msg: "User not found" }, { status: 404 });
     }
 
-     // Vérifie le mot de passe (bcrypt)
-    //const valid = await bcrypt.compare(pwd, user.pwd);
-    const valid = user.pwd === pwd; // ⚠️ uniquement pour tester sans hash
+     // Vérifie le mot de passe
+    const valid = user.pwd === pwd;
 
     if (!valid) {
       return NextResponse.json({ msg: "Invalid credentials" }, { status: 401 });
@@ -35,7 +34,7 @@ export async function POST(req: Request) {
     // Génération du token JWT
     const token = jwt.sign(
         { id: user.id, role: user.role },
-        process.env.JWT_SECRET || "default_secret_key", // ⚠️ pense à mettre une vraie clé dans ton .env
+        process.env.JWT_SECRET || "default_secret_key",
         { expiresIn: "10h" }
     );
 
