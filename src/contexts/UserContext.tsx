@@ -142,13 +142,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const userId = user?.id;
     
     try {
-      await fetch("/api/auth/logout", {
+      console.log("Calling logout API...");
+      const response = await fetch("/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
+      console.log("Logout API response:", response.status);
+      
+      if (!response.ok) {
+        console.error("Logout API failed:", response.statusText);
+      }
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
+      console.log("Clearing user state...");
       // Clear user state and localStorage
       setUser(null);
       

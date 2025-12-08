@@ -4,7 +4,7 @@ export default function AvatarMini({ avatar }) {
     if (!avatar) return null;
 
     return (
-        <div className="mini-avatar-box">
+        <div className="mini-avatar-box hover:cursor-pointer">
 
             {/* TOP */}
             <img

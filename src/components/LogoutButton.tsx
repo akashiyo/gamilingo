@@ -8,9 +8,15 @@ export default function LogoutButton() {
   const { logout } = useUser();
 
   const handleLogout = async () => {
-    await logout();
-    // Use hard navigation to ensure complete state reset
-    window.location.href = "/login";
+    try {
+      // Wait for logout to complete before navigating
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      // Use hard navigation to ensure complete state reset
+      window.location.href = "/login";
+    }
   };
 
   return (

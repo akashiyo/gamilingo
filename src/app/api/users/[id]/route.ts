@@ -4,10 +4,11 @@ import { prisma } from "@/lib/prisma";
 /* ----------------------- GET one user ----------------------- */
 export async function GET(
     _req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = Number(params.id);
+    const { id: idParam } = await params;
+    const id = Number(idParam);
 
     const user = await prisma.user.findUnique({
       where: { id },
@@ -46,10 +47,11 @@ export async function GET(
 /* ----------------------- PUT (update user) ----------------------- */
 export async function PUT(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = Number(params.id);
+    const { id: idParam } = await params;
+    const id = Number(idParam);
     const formData = await req.formData();
 
     const name = formData.get("name") as string | null;
@@ -103,10 +105,11 @@ export async function PUT(
 /* ----------------------- DELETE (remove user) ----------------------- */
 export async function DELETE(
     _req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = Number(params.id);
+    const { id: idParam } = await params;
+    const id = Number(idParam);
     await prisma.user.delete({ where: { id } });
 
     return NextResponse.json({ msg: `User ${id} deleted successfully` });

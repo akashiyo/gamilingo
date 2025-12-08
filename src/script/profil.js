@@ -5,6 +5,7 @@ import "../app/profil/profil.css";
 import AvatarMini from "@/components/AvatarMini";
 import { useRouter } from "next/navigation";
 import AvatarMiniPreview from "@/components/AvatarMini";
+import { useUser } from "@/contexts/UserContext";
 
 
 export default function Profil() {
@@ -12,6 +13,7 @@ export default function Profil() {
     const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState(null);
     const router = useRouter();
+    const { logout } = useUser();
 
     const [formData, setFormData] = useState({
         name: "",
@@ -97,6 +99,7 @@ export default function Profil() {
                 />
 
                 <h2 className="profile-name">{formData.username}</h2>
+                <span className="text-black text-xs italic">Click on your avatar to customize it</span>
             </div>
             <div className="profile-badges">
                 <div className="badge level-badge">
@@ -133,7 +136,7 @@ export default function Profil() {
                 />
             </div>
 
-            <div className="profile-action">
+            <div className="profile-action flex justify-center items-center">
                 <button className="validate-btn" onClick={handleSubmit}>
                     Valider
                 </button>
@@ -150,16 +153,8 @@ export default function Profil() {
             </div>
 
             <button
-                className="logout-btn profile-links"
-                onClick={() => {
-                    localStorage.removeItem("user");
-
-                    // mettre à jour le header
-                    window.dispatchEvent(new Event("user-updated"));
-
-                    // redirection
-                    window.location.href = "/login";
-                }}
+                className="logout-btn profile-links text-red-700"
+                onClick={logout}
             >
                 Se déconnecter
             </button>

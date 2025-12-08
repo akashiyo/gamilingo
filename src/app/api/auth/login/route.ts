@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     const token = jwt.sign(
         { id: user.id, role: user.role },
         process.env.JWT_SECRET || "default_secret_key", // ⚠️ pense à mettre une vraie clé dans ton .env
-        { expiresIn: "1h" }
+        { expiresIn: "10h" }
     );
 
     // Création du cookie sécurisé
@@ -46,6 +46,7 @@ export async function POST(req: Request) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
+      maxAge: 10 * 60 * 60, // 10 hours
     });
 
     // Réponse JSON avec les infos utiles

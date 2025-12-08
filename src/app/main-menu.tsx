@@ -24,10 +24,10 @@ const BottomNav = () => {
         },
         {
             id: 'level',
-            label: 'Apprentissages',
+            label: 'Ai-Chatbot',
             icon: '/level.svg',
             iconActive: '/level-select.svg',
-            path: '/level'
+            path: '/ai-chat'
         },
         {
             id: 'profil',

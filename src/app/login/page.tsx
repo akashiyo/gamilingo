@@ -6,8 +6,8 @@ import { useUser } from "@/contexts/UserContext";
 export default function LoginPage() {
   const router = useRouter();
   const { setUser, refreshUser } = useUser();
-  const [username, setUsername] = useState("");
-  const [pwd, setPwd] = useState("");
+  const [username, setUsername] = useState("deuxieme");
+  const [pwd, setPwd] = useState("test");
   const [error, setError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -53,7 +53,7 @@ export default function LoginPage() {
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full mb-3 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-400 outline-none transition"
+              className="border border-gray-300 p-2 rounded w-full mb-3 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-400 outline-none transition dark:text-black"
           />
 
           <input
@@ -61,7 +61,7 @@ export default function LoginPage() {
               placeholder="Password"
               value={pwd}
               onChange={(e) => setPwd(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full mb-4 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-400 outline-none transition"
+              className="border border-gray-300 p-2 rounded w-full mb-4 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-400 outline-none transition dark:text-black"
           />
 
           <button
