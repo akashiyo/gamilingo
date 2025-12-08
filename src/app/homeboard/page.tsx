@@ -72,18 +72,25 @@ export default function HomeboardPage() {
   if (loading || !isAuthenticated) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p className="text-gray-500">Redirecting to login...</p>
+        <p className="text-gray-500">Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-12 min-h-screen" style={{ backgroundColor: "var(--medium-purple)" }}>
+    <div className="p-6 space-y-12 min-h-screen">
       {Object.entries(stepsByLevel).map(([level, steps]) => {
         const lvl = Number(level);
         const isLevelLocked = userLevel < lvl;
         return (
           <div key={lvl} className="opacity-100 transition-all">
+
+            {isLevelLocked && (
+              <p className="text-sm text-gray-500 italic mt-2 mb-4 flex justify-center items-center">
+                🔒 Reach <span className="font-semibold mx-[.5rem]"> Level {lvl} </span> to unlock these steps
+              </p>
+            )}
+
             <RoadmapStepper
               steps={Object.values(steps)}
               title={levelTitles[lvl]}
@@ -92,11 +99,6 @@ export default function HomeboardPage() {
               userXp={userXp}
             />
 
-            {isLevelLocked && (
-              <p className="text-sm text-gray-500 italic mt-2">
-                🔒 Reach Level {lvl} to unlock these steps
-              </p>
-            )}
           </div>
         );
       })}

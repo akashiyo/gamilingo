@@ -18,7 +18,7 @@ export default function XPBar() {
   const percent = Math.max(0, Math.min(100, Math.round((progressInLevel / XP_PER_LEVEL) * 100)));
 
   return (
-    <div className="ml-auto flex items-center gap-3 pr-4" aria-live="polite">
+    <div className="flex items-center gap-3 pr-4" aria-live="polite">
       <div className="text-sm text-gray-700">Lvl {level}</div>
       <div className="w-48 bg-gray-300 rounded overflow-hidden h-4">
         <div className="bg-emerald-400 h-4" style={{ width: `${percent}%` }} />

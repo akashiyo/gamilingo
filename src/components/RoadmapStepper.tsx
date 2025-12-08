@@ -85,7 +85,7 @@ export default function RoadmapStepper({
               onClick={() => handleStepClick(index)}
             >
               {/* Timeline Dot */}
-              <div className="absolute -left-[33px] top-6 w-4 h-4 rounded-full border-2 border-gray-400 bg-white" />
+              <div className="absolute -left-[33px] top-6 w-4 h-4 rounded-full border-2 border-gray-400" style={{ backgroundColor: "var(--dark-purple)" }} />
 
               {/* Image */}
               <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">

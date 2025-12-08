@@ -59,7 +59,7 @@ export default function UserHeader() {
             <div className="user-header-right">
                 <div className="level-box">
                     <img src="/fire.svg" alt="Fire" className="badge-icon" />
-                    <p className="badge-text">Lv. {user.level}</p>
+                    <p className="badge-text dark:text-black">Lv. {user.level}</p>
                 </div>
 
                 <Image
