@@ -155,6 +155,10 @@ const Memory = () => {
 
     const gridTemplate = `repeat(${gridCols}, minmax(0, 1fr))`;
 
+    // Get theme from URL for display
+    const params = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+    const theme = params.get("theme") || "Foods";
+
     // Show final victory screen when all levels are completed
     if (gameCompleted) {
         return (
@@ -162,23 +166,29 @@ const Memory = () => {
                 className="flex flex-col items-center justify-center min-h-screen p-4 md:p-8"
                 style={{backgroundColor: "rgba(224, 211, 239, 1)"}}
             >
-                <div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl text-center max-w-md">
-                    <div className="text-6xl mb-4">🏆</div>
-                    <h1 className="text-3xl md:text-4xl font-bold mb-4" style={{color: "rgba(122, 74, 156, 1)"}}>
-                        Félicitations !
-                    </h1>
-                    <p className="text-lg md:text-xl text-gray-600 mb-6">
-                        Tu as terminé tous les niveaux du Memory ! 🎉
-                    </p>
-                    <p className="text-md text-green-600 font-semibold mb-6">
-                        +100 XP gagnés !
-                    </p>
-                    <button
-                        onClick={restartGame}
-                        className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
-                    >
-                        Rejouer
-                    </button>
+                {/* Win Popup Modal - matching hangman style */}
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-3xl p-8 mx-4 max-w-sm w-full text-center shadow-2xl animate-bounce-in">
+                        <div className="text-6xl mb-4">🎉🏆🎉</div>
+                        <h2 className="text-2xl font-bold text-purple-700 mb-2">Félicitations !</h2>
+                        <p className="text-gray-600 mb-2">Vous avez gagné le Memory !</p>
+                        <p className="text-purple-600 font-semibold mb-4">Thème: {theme}</p>
+                        <p className="text-green-600 font-bold mb-6">+50 XP gagnés !</p>
+                        <div className="flex flex-col gap-3">
+                            <button
+                                onClick={restartGame}
+                                className="bg-purple-500 text-white px-6 py-3 rounded-full hover:bg-purple-600 shadow-lg font-semibold"
+                            >
+                                Rejouer
+                            </button>
+                            <button
+                                onClick={() => window.history.back()}
+                                className="bg-gray-200 text-gray-700 px-6 py-3 rounded-full hover:bg-gray-300 shadow font-semibold"
+                            >
+                                Retour aux jeux
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         );

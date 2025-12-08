@@ -1,19 +1,20 @@
-import { NextResponse } from "next/server";
-
-export async function POST() {
-  const res = NextResponse.json({ ok: true });
-  // Clear the JWT cookie named `token`
-  res.cookies.set({ name: "token", value: "", maxAge: 0, path: "/" });
-  return res;
-}
-
-export default POST;
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export const POST = async () => {
+export async function POST() {
   const cookieStore = await cookies();
   cookieStore.delete("token");
+  
+  // Also set the cookie to empty with maxAge 0 for extra safety
+  cookieStore.set({
+    name: "token",
+    value: "",
+    maxAge: 0,
+    path: "/",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
 
   return NextResponse.json({ msg: "Logged out successfully" });
-};
+}

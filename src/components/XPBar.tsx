@@ -23,7 +23,7 @@ export default function XPBar() {
       <div className="w-48 bg-gray-300 rounded overflow-hidden h-4">
         <div className="bg-emerald-400 h-4" style={{ width: `${percent}%` }} />
       </div>
-      <div className="text-xs text-gray-700 opacity-90">{xp} XP · {toNext} to next</div>
+      <div className="text-xs text-gray-700 opacity-100">{xp} XP · {toNext} to next level</div>
     </div>
   );
 }

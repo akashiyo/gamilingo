@@ -9,7 +9,8 @@ export default function LogoutButton() {
 
   const handleLogout = async () => {
     await logout();
-    router.push("/login");
+    // Use hard navigation to ensure complete state reset
+    window.location.href = "/login";
   };
 
   return (

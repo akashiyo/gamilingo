@@ -62,9 +62,6 @@ export default function AuthHeader() {
       <Link href="/homeboard" className="hover:underline">
         Homeboard
       </Link>
-      <Link href="/games/flashcards" className="hover:underline">
-        Flashcards
-      </Link>
       <Link href="/profil" className="hover:underline">
         Profil
       </Link>

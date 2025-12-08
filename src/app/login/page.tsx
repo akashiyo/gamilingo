@@ -5,7 +5,7 @@ import { useUser } from "@/contexts/UserContext";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { setUser } = useUser();
+  const { setUser, refreshUser } = useUser();
   const [username, setUsername] = useState("");
   const [pwd, setPwd] = useState("");
   const [error, setError] = useState("");
@@ -27,7 +27,9 @@ export default function LoginPage() {
         return;
       }
 
+      // Set initial user data, then refresh to get complete data (including image)
       setUser(data.user);
+      await refreshUser();
       
       router.push("/profil");
 

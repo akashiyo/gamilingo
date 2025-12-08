@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 const games = [
-  { id: "flashcards", name: "Flashcards", image: "/images/flashcard.png" },
   { id: "memory", name: "Memory Game", image: "/images/memory.png" },
   { id: "hangman", name: "Hangman", image: "/images/hangman.png" },
 ];
@@ -20,16 +19,7 @@ export default function GamesPage() {
   const theme = searchParams.get("theme") || "Unknown";
 
   const handleGameClick = (gameId: string) => {
-    // Route mapping:
-    // - flashcards is nested under /games/flashcards
-    // - memory and hangman live at top-level (/memory, /hangman)
     const qs = `?level=${level}&theme=${encodeURIComponent(theme)}`;
-    if (gameId === "flashcards") {
-      router.push(`/games/flashcards${qs}`);
-      return;
-    }
-
-    // default: top-level route
     router.push(`/${gameId}${qs}`);
   };
 

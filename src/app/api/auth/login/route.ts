@@ -55,8 +55,10 @@ export async function POST(req: Request) {
         id: user.id,
         name: user.name,
         username: user.username,
+        email: user.email,
         role: user.role,
         level: user.level,
+        xp: user.xp,
       },
     });
   } catch (error: any) {

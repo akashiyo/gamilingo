@@ -87,20 +87,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loadUser = useCallback(async () => {
     setLoading(true);
     try {
-      // Try to get from localStorage first for instant load
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        const parsed = JSON.parse(storedUser);
-        setUserState(parsed);
-      }
-
-      // Then fetch fresh data from API
+      // First, check with API if user is authenticated
       const freshUser = await fetchUserData();
       if (freshUser) {
         setUserState(freshUser);
         localStorage.setItem("user", JSON.stringify(freshUser));
       } else {
-        // Not authenticated, clear state
+        // Not authenticated, clear state and localStorage
         setUserState(null);
         localStorage.removeItem("user");
       }
@@ -143,8 +136,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // since the event listener calls updateXP which would dispatch again
   }, []);
 
-  // Logout function
+  // Logout function - clears all user data from frontend
   const logout = useCallback(async () => {
+    // Get user ID before clearing for sessionStorage cleanup
+    const userId = user?.id;
+    
     try {
       await fetch("/api/auth/logout", {
         method: "POST",
@@ -153,9 +149,30 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
+      // Clear user state and localStorage
       setUser(null);
+      
+      // Clear all user-related data from localStorage
+      localStorage.removeItem("user");
+      localStorage.removeItem("knownWords");
+      
+      // Clear AI chat history from sessionStorage
+      if (userId) {
+        sessionStorage.removeItem(`ai-chat-${userId}`);
+      }
+      
+      // Clear any other potential user data
+      // Loop through sessionStorage to remove any user-specific keys
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        if (key && key.startsWith("ai-chat-")) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach(key => sessionStorage.removeItem(key));
     }
-  }, [setUser]);
+  }, [setUser, user?.id]);
 
   // Initial load
   useEffect(() => {

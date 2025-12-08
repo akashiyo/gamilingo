@@ -6,7 +6,10 @@ const SECRET = process.env.JWT_SECRET || "default_secret_key";
 
 export const GET = async (req: Request) => {
   try {
-    const token = req.headers.get("cookie")?.split("token=")?.[1];
+    const cookieHeader = req.headers.get("cookie") || "";
+    // Properly parse the token from cookies (handles multiple cookies)
+    const tokenMatch = cookieHeader.match(/token=([^;]*)/);
+    const token = tokenMatch ? tokenMatch[1] : null;
 
     if (!token) return NextResponse.json({ msg: "Not authenticated" }, { status: 401 });
 
