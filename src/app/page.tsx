@@ -4,8 +4,11 @@ import Image from "next/image";
 import React from "react";
 import Head from "next/head";
 import "./home.css";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+    const router = useRouter();
+    
     return (
         <div
             className="relative h-screen w-screen flex flex-col items-center justify-center overflow-hidden bg-[#cfe3ff]"
@@ -98,7 +101,7 @@ export default function Home() {
                     <button
                         type="button"
                         className="absolute left-1/2 -translate-x-1/2 bottom-[11%] px-7 py-3 text-white rounded-full font-semibold shadow-lg active:scale-95 transition"
-                        onClick={() => (window.location.href = '/login')}
+                        onClick={() => router.push('/login')}
                         style={{
                             backgroundColor: "var(--dark-purple)",
                             bottom:"80px"
