@@ -177,7 +177,7 @@ const Memory = () => {
                         <h2 className="text-2xl font-bold text-purple-700 mb-2">Félicitations !</h2>
                         <p className="text-gray-600 mb-2">Vous avez gagné le Memory !</p>
                         <p className="text-purple-600 font-semibold mb-4">Thème: {theme}</p>
-                        <p className="text-green-600 font-bold mb-6">+50 XP gagnés !</p>
+                        {/* <p className="text-green-600 font-bold mb-6">+50 XP gagnés !</p> */}
                         <div className="flex flex-col gap-3">
                             <button
                                 onClick={restartGame}

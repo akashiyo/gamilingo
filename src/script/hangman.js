@@ -244,7 +244,7 @@ class Hangman extends Component {
 
         if (loading) {
             return (
-                <div className="bg-purple-200 min-h-screen flex items-center justify-center">
+                <div className="min-h-screen flex items-center justify-center">
                     <p className="text-lg animate-pulse text-purple-700">Chargement du mot...</p>
                 </div>
             );
@@ -252,7 +252,7 @@ class Hangman extends Component {
 
         if (error) {
             return (
-                <div className="bg-purple-200 min-h-screen flex flex-col items-center justify-center text-center gap-4 px-4">
+                <div className="min-h-screen flex flex-col items-center justify-center text-center gap-4 px-4">
                     <p className="text-red-600 font-semibold">Erreur : {error}</p>
                     <button
                         onClick={this.reset}
@@ -328,7 +328,7 @@ class Hangman extends Component {
         const progress = ((maxWrong - nWrong) / maxWrong) * 100;
 
         return (
-            <div className="bg-purple-200 min-h-screen flex flex-col px-4 py-6">
+            <div className="min-h-screen flex flex-col px-4 py-6">
 
                 {/* Win Popup Modal */}
                 {showWinPopup && (
@@ -338,7 +338,7 @@ class Hangman extends Component {
                             <h2 className="text-2xl font-bold text-purple-700 mb-2">Félicitations !</h2>
                             <p className="text-gray-600 mb-2">Vous avez gagné le Hangman !</p>
                             <p className="text-purple-600 font-semibold mb-4">Thème: {theme}</p>
-                            <p className="text-green-600 font-bold mb-6">+50 XP gagnés !</p>
+                            {/* { this.awarded && <p className="text-green-600 font-bold mb-6">+50 XP gagnés !</p>} */}
                             <div className="flex flex-col gap-3">
                                 <button
                                     onClick={this.reset}
@@ -410,7 +410,6 @@ export default Hangman;
             const gameWon = this.state.wordsGuessed >= wordsToWin;
             
             if (gameWon && !this.awarded) {
-                this.awarded = true;
                 // determine level and theme from URL
                 const params = new URLSearchParams(window.location.search);
                 const level = Number(params.get("level") || 1);
