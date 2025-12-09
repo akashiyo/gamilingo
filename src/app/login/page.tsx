@@ -1,11 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/contexts/UserContext";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { setUser, refreshUser } = useUser();
+  const { setUser, refreshUser, isAuthenticated, loading } = useUser();
   const [username, setUsername] = useState("deuxieme");
   const [pwd, setPwd] = useState("test");
   const [error, setError] = useState("");
@@ -37,6 +37,12 @@ export default function LoginPage() {
       setError("Erreur réseau ou serveur.");
     }
   };
+
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      router.push("/homeboard");
+    }
+  }, [loading, isAuthenticated]);
 
   return (
       <div className="min-h-screen flex items-center justify-center px-4" 
