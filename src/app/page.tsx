@@ -67,26 +67,23 @@ export default function Home() {
                 style={{ bottom: "10", left: "250px", zIndex: 100}}
             />
 
-            {/* Logo GAMILINGOW */}
-            <img
-                className="absolute z-0 select-none opacity-60 w-[85vw] max-w-[800px]"
-                src="/GAMILINGOW.svg"
-                alt="gamilingo"
-                style={{
-                    bottom: "13%", // on le remonte un peu plus
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    objectFit: "contain",
-                }}
-            />
-
             {/* Dragon et bouton */}
             <div
-                className="absolute left-1/2 -translate-x-1/2 w-full flex justify-center z-10"
+                className="absolute left-1/2 -translate-x-1/2 w-full flex flex-col items-center justify-center z-10"
                 style={{
                     bottom: 0
                 }}
             >
+                {/* Logo GAMILINGOW */}
+                <img
+                    className="select-none opacity-60 w-[85vw] max-w-[800px] mb-4"
+                    src="/GAMILINGOW.svg"
+                    alt="gamilingo"
+                    style={{
+                        objectFit: "contain",
+                    }}
+                />
+                
                 <div className="relative w-[100vw] max-w-[700px]">
                     <Image
                         src="/vodka.png"

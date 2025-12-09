@@ -24,32 +24,34 @@ export default function GamesPage() {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-lg font-semibold text-gray-700 mb-4">
-        Road to Lv. {level === "1" ? "A1" : level === "2" ? "A2" : "B1"} › {theme}
-      </h2>
+    <div className="p-4">
+      <div className="container mx-auto max-w-[700px]">
+        <h2 className="text-lg font-semibold text-gray-700 mb-4">
+          Road to Lv. {level === "1" ? "A1" : level === "2" ? "A2" : "B1"} › {theme}
+        </h2>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 mt-6">
-        {games.map((game) => (
-          <motion.div
-            key={game.id}
-            whileHover={{ scale: 1.05 }}
-            onClick={() => handleGameClick(game.id)}
-            className="cursor-pointer"
-          >
-            <Card className="flex flex-col items-center justify-center p-6 rounded-2xl shadow-sm hover:shadow-md bg[var(--medium-purple)]">
-                <div className="relative w-16 h-16 mb-2">
-                    <Image
-                        src={game.image}
-                        alt={game.name}
-                        fill
-                        className="object-contain rounded-lg"
-                    />
-                </div>
-              <p className="text-sm font-medium text-gray-700">{game.name}</p>
-            </Card>
-          </motion.div>
-        ))}
+        <div className="flex flex-col gap-6 mt-6">
+          {games.map((game) => (
+            <motion.div
+              key={game.id}
+              whileHover={{ scale: 1.05 }}
+              onClick={() => handleGameClick(game.id)}
+              className="cursor-pointer"
+            >
+              <Card className="flex flex-col items-center justify-center p-8 rounded-2xl shadow-sm hover:shadow-md bg[var(--medium-purple)]">
+                  <div className="relative w-24 h-24 mb-4">
+                      <Image
+                          src={game.image}
+                          alt={game.name}
+                          fill
+                          className="object-contain rounded-lg"
+                      />
+                  </div>
+                <p className="text-base font-medium text-gray-700">{game.name}</p>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );

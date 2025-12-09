@@ -39,45 +39,92 @@ export default function LoginPage() {
   };
 
   return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-        <form
-            onSubmit={handleLogin}
-            className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm"
-        >
-          <h1 className="text-2xl font-bold text-center mb-6 text-indigo-700">Login</h1>
-
-          {error && <p className="text-red-500 text-sm mb-3 text-center">{error}</p>}
-
-          <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full mb-3 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-400 outline-none transition dark:text-black"
-          />
-
-          <input
-              type="password"
-              placeholder="Password"
-              value={pwd}
-              onChange={(e) => setPwd(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full mb-4 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-400 outline-none transition dark:text-black"
-          />
-
-          <button
-              type="submit"
-              className="bg-indigo-600 text-white w-full py-2 rounded font-semibold hover:bg-indigo-700 transition"
+      <div className="min-h-screen flex items-center justify-center px-4" 
+           style={{ backgroundColor: 'var(--medium-purple)' }}>
+        <div className="w-full max-w-md">
+          <form
+              onSubmit={handleLogin}
+              className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl"
           >
-            Log in
-          </button>
+            {/* Logo or Title */}
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold mb-2" 
+                  style={{ color: 'var(--dark-purple)' }}>
+                Gamilingo
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300 text-sm">
+                Connectez-vous pour continuer
+              </p>
+            </div>
 
-          <p className="text-center text-sm mt-4 text-gray-600">
-            Vous n’avez pas encore de compte ?{" "}
-            <a href="/signup" className="text-indigo-600 hover:underline font-medium">
-              Créez-en un
-            </a>
-          </p>
-        </form>
+            {error && (
+              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-600 dark:text-red-400 text-sm p-3 rounded-xl mb-4 text-center">
+                {error}
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                  Nom d'utilisateur
+                </label>
+                <input
+                    id="username"
+                    type="text"
+                    placeholder="Entrez votre nom d'utilisateur"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all"
+                    style={{ 
+                      '--tw-ring-color': 'var(--dark-purple)',
+                      '--tw-ring-offset-color': 'white'
+                    } as React.CSSProperties}
+                    required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                  Mot de passe
+                </label>
+                <input
+                    id="password"
+                    type="password"
+                    placeholder="Entrez votre mot de passe"
+                    value={pwd}
+                    onChange={(e) => setPwd(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all"
+                    style={{ 
+                      '--tw-ring-color': 'var(--dark-purple)',
+                      '--tw-ring-offset-color': 'white'
+                    } as React.CSSProperties}
+                    required
+                />
+              </div>
+            </div>
+
+            <button
+                type="submit"
+                className="w-full py-3 rounded-xl font-semibold text-white mt-6 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all"
+                style={{ backgroundColor: 'var(--dark-purple)' }}
+            >
+              Se connecter
+            </button>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Pas encore de compte ?{" "}
+                <a 
+                  href="/signup" 
+                  className="font-semibold hover:underline transition-colors"
+                  style={{ color: 'var(--dark-purple)' }}
+                >
+                  Inscrivez-vous
+                </a>
+              </p>
+            </div>
+          </form>
+        </div>
       </div>
   );
 }

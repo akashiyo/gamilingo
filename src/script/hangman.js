@@ -178,7 +178,7 @@ class Hangman extends Component {
     guessWord = () => {
         return this.state.answer
             .split("")
-            .map((ltr) => (this.state.guessed.has(ltr) ? ltr : "_"));
+            .map((ltr) => (this.state.guessed.has(ltr) || ltr === " " ? ltr : "_"));
     };
 
     handleGuess = (e) => {
@@ -283,12 +283,13 @@ class Hangman extends Component {
 
         if (showingWordSuccess && !gameWon) {
             gameState = (
-                <div className="flex flex-col items-center gap-4">
-                    <p className="text-green-600 text-xl font-bold">Mot trouvé ! 🎉</p>
-                    <p className="text-gray-600">Mots devinés: {wordsGuessed + 1} / {wordsToWin}</p>
+                <div className="col-span-6 flex flex-col items-center gap-4 bg-white rounded-2xl p-6 shadow-lg">
+                    <div className="text-4xl mb-2">🎉</div>
+                    <p className="text-green-600 text-xl font-bold">Mot trouvé !</p>
+                    <p className="text-gray-600 font-medium">Mots devinés: {wordsGuessed} / {wordsToWin}</p>
                     <button
                         onClick={this.nextWord}
-                        className="bg-purple-500 text-white px-6 py-2 rounded-4xl hover:bg-purple-600 shadow-lg"
+                        className="bg-purple-500 text-white px-8 py-3 rounded-full hover:bg-purple-600 shadow-lg font-semibold transition-all hover:scale-105"
                     >
                         Mot suivant
                     </button>
@@ -296,12 +297,13 @@ class Hangman extends Component {
             );
         } else if (gameWon) {
             gameState = (
-                <div className="flex flex-col items-center gap-4">
-                    <p className="text-green-600 text-xl font-bold">Félicitations ! Vous avez gagné ! 🎉🏆</p>
-                    <p className="text-gray-600">{wordsToWin} mots devinés !</p>
+                <div className="col-span-6 flex flex-col items-center gap-4 bg-white rounded-2xl p-6 shadow-lg">
+                    <div className="text-4xl mb-2">🎉🏆</div>
+                    <p className="text-green-600 text-xl font-bold">Félicitations ! Vous avez gagné !</p>
+                    <p className="text-gray-600 font-medium">{wordsToWin} mots devinés !</p>
                     <button
                         onClick={this.reset}
-                        className="bg-purple-500 text-white px-6 py-2 rounded-4xl hover:bg-purple-600 shadow-lg"
+                        className="bg-purple-500 text-white px-8 py-3 rounded-full hover:bg-purple-600 shadow-lg font-semibold transition-all hover:scale-105"
                     >
                         Rejouer
                     </button>
@@ -309,12 +311,13 @@ class Hangman extends Component {
             );
         } else if (gameOver) {
             gameState = (
-                <div className="flex flex-col items-center gap-4">
-                    <p className="text-red-600 text-xl font-bold">Perdu ! 😢</p>
-                    <p className="text-gray-600">Mots devinés: {wordsGuessed} / {wordsToWin}</p>
+                <div className="col-span-6 flex flex-col items-center gap-4 bg-white rounded-2xl p-6 shadow-lg">
+                    <div className="text-4xl mb-2">😢</div>
+                    <p className="text-red-600 text-xl font-bold">Perdu !</p>
+                    <p className="text-gray-600 font-medium">Mots devinés: {wordsGuessed} / {wordsToWin}</p>
                     <button
                         onClick={this.reset}
-                        className="bg-purple-500 text-white px-6 py-2 rounded-4xl hover:bg-purple-600 shadow-lg"
+                        className="bg-purple-500 text-white px-8 py-3 rounded-full hover:bg-purple-600 shadow-lg font-semibold transition-all hover:scale-105"
                     >
                         Réessayer
                     </button>
@@ -338,7 +341,7 @@ class Hangman extends Component {
                             <p className="text-green-600 font-bold mb-6">+50 XP gagnés !</p>
                             <div className="flex flex-col gap-3">
                                 <button
-                                    onClick={() => this.setState({ showWinPopup: false })}
+                                    onClick={this.reset}
                                     className="bg-purple-500 text-white px-6 py-3 rounded-full hover:bg-purple-600 shadow-lg font-semibold"
                                 >
                                     Rejouer
@@ -355,19 +358,26 @@ class Hangman extends Component {
                 )}
 
                 {/* Container principal */}
-                <div className="max-w-md mx-auto w-full flex flex-col items-center">
-                    {/* Progress indicator */}
-                    <div className="mb-4 text-purple-700 font-semibold">
-                        Mots: {wordsGuessed} / {wordsToWin}
+                <div className="max-w-2xl mx-auto w-full flex flex-col items-center">
+                    {/* Progress and Errors info in one line */}
+                    <div className="mb-4 w-full max-w-md bg-white rounded-2xl p-4 shadow-md flex items-center justify-between">
+                        <div className="text-purple-700 font-semibold">
+                            Mots: {wordsGuessed} / {wordsToWin}
+                        </div>
+                        {!wordGuessed && !gameOver && !showingWordSuccess && (
+                            <div className="text-gray-600 font-medium">
+                                Erreurs: {nWrong} / {maxWrong}
+                            </div>
+                        )}
                     </div>
 
                     {/* Mot à deviner */}
-                    <div className="text-4xl font-bold tracking-[0.5em] mb-8 text-gray-800">
+                    <div className="text-3xl sm:text-4xl font-bold tracking-[0.3em] sm:tracking-[0.5em] mb-6 text-gray-800 text-center">
                         {gameOver ? answer.toUpperCase() : this.guessWord().join(" ").toUpperCase()}
                     </div>
 
                     {/* Image du pendu dans un cadre blanc avec bordure pointillée */}
-                    <div className="bg-white rounded-3xl p-8 mb-8 w-full max-w-sm border-2 border-dashed border-purple-300 shadow-lg">
+                    <div className="bg-white rounded-3xl p-6 sm:p-8 mb-6 w-full max-w-sm border-2 border-dashed border-purple-300 shadow-lg">
                         <img
                             src={images[Math.min(nWrong, images.length - 1)]}
                             alt={`Step ${nWrong}`}
@@ -376,16 +386,9 @@ class Hangman extends Component {
                     </div>
 
                     {/* Alphabet - grille 6 colonnes */}
-                    <div className="grid grid-cols-6 gap-2 mb-6 w-full max-w-sm rounded-[35%]">
+                    <div className="grid grid-cols-6 gap-2 mb-4 w-full max-w-md">
                         {gameState}
                     </div>
-
-                    {/* Info erreurs */}
-                    {!wordGuessed && !gameOver && !showingWordSuccess && (
-                        <p className="text-gray-600 text-sm">
-                            Erreurs: {nWrong} / {maxWrong}
-                        </p>
-                    )}
                 </div>
             </div>
         );

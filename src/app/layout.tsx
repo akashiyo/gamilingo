@@ -1,12 +1,14 @@
+"use client";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link"; // pour créer des liens entre pages
+import Link from "next/link";
 import XPBar from "@/components/XPBar";
 import AuthHeader from "@/components/AuthHeader";
 import "./globals.css";
 import BottomNav from "@/app/main-menu";
 import UserHeader from "@/components/UserHeader";
 import { UserProvider } from "@/contexts/UserContext";
+import { usePathname } from "next/navigation";
 
 
 
@@ -20,10 +22,33 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Gamilingo",
-  description: "Learning words with fun 🐉",
-};
+function LayoutContent({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isHomepage = pathname === "/";
+
+  return (
+    <>
+      {/* barre de navigation */}
+      {!isHomepage && (
+        <header className="p-2 sm:p-4 w-full">
+          <div className="container mx-auto max-w-[700px] flex items-center justify-between px-2 sm:px-0">
+            <UserHeader/>
+          </div>
+        </header>
+      )}
+
+      {/* contenu spécifique à chaque page */}
+      <main>{children}</main>
+
+      {/* footer global */}
+      {!isHomepage && (
+        <footer className="text-center text-sm p-2 sm:p-4 mt-6 flex-wrap items-center justify-center">
+          <BottomNav/>
+        </footer>
+      )}
+    </>
+  );
+}
 
 export default function RootLayout({
   children,
@@ -37,23 +62,7 @@ export default function RootLayout({
         style={{ backgroundColor: "var(--medium-purple)" }}
       >
         <UserProvider>
-          {/* barre de navigation */}
-          <header className="p-4">
-            <div className="container mx-auto flex items-center justify-between">
-              {/* <AuthHeader /> */}
-              {/* <XPBar /> */}
-              <UserHeader/>
-            </div>
-          </header>
-
-          {/* contenu spécifique à chaque page */}
-          <main>{children}</main>
-
-
-          {/* footer global */}
-          <footer className="text-center text-sm p-4 mt-6 flex-wrap items-center justify-center">
-            <BottomNav/>
-          </footer>
+          <LayoutContent>{children}</LayoutContent>
         </UserProvider>
       </body>
     </html>

@@ -28,5 +28,3 @@ export const GET = async (req: Request) => {
     return NextResponse.json({ msg: "Failed to fetch xp", error: error.message }, { status: 500 });
   }
 };
-
-export default GET;

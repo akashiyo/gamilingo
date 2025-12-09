@@ -11,6 +11,7 @@ const Memory = () => {
     const [disabled, setDisabled] = useState(false);
     const [won, setWon] = useState(false);
     const [difficulty, setDifficulty] = useState(1);
+    const [completedLevel, setCompletedLevel] = useState(null);
     const [gameCompleted, setGameCompleted] = useState(false);
 
     const TOTAL_CARDS = 12;
@@ -110,6 +111,7 @@ const Memory = () => {
     useEffect(() => {
         if (solved.length === cards.length && cards.length > 0 && !won) {
             setWon(true);
+            setCompletedLevel(difficulty);
 
             // award XP when the user wins this memory round
             (async () => {
@@ -139,6 +141,8 @@ const Memory = () => {
                 if (curIndex < difficulties.length - 1) {
                     const next = difficulties[curIndex + 1];
                     setDifficulty(next);
+                    setWon(false);
+                    setCompletedLevel(null);
                 } else {
                     // All levels completed - show final victory!
                     setGameCompleted(true);
@@ -253,9 +257,9 @@ const Memory = () => {
                 ))}
             </div>
 
-            {won && (
+            {won && completedLevel && (
                 <div className="mt-4 text-2xl md:text-3xl font-bold text-green-600 animate-bounce text-center">
-                    Bravo ! Niveau {difficulty} terminé 🎉
+                    Bravo ! Niveau {completedLevel} terminé 🎉
                 </div>
             )}
         </div>

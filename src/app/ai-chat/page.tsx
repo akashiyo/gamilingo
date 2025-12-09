@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { useUser } from "@/contexts/UserContext";
 
 const groq = createGroq({
-  apiKey: "", // Setup your API key here
+  apiKey: " ", // Setup your API key here
 });
 
 interface Message {
@@ -116,7 +116,7 @@ You should politely decline requests that are not related to English language le
   if (loading || !isAuthenticated) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p className="text-gray-500">Redirecting to login...</p>
+        <p className="text-gray-500">Loading...</p>
       </div>
     );
   }
@@ -129,7 +129,7 @@ You should politely decline requests that are not related to English language le
   };
 
   return (
-    <div className="flex flex-col h-screen max-w-5xl mx-auto p-4">
+    <div className="flex flex-col h-screen max-w-[700px] mx-auto p-4 mb-[55px]">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold" style={{ color: 'var(--dark-purple)' }}>English Learning AI Chat</h1>
         {messages.length > 0 && (
@@ -176,7 +176,7 @@ You should politely decline requests that are not related to English language le
                   border: '1px solid var(--medium-purple)'
                 }}
               >
-                <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                <p className="whitespace-pre-wrap leading-relaxed dark:text-black">{message.content}</p>
               </div>
               {message.role === 'user' && (
                 <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white text-sm mb-1" style={{ background: 'var(--medium-grey)' }}>
@@ -193,7 +193,7 @@ You should politely decline requests that are not related to English language le
               <Image src="/vodka-for-ai.png" alt="AI" width={32} height={32} className="object-cover" />
             </div>
             <div className="max-w-[75%] bg-white rounded-3xl p-4 shadow-md" style={{ border: '1px solid var(--medium-purple)' }}>
-              <p className="whitespace-pre-wrap leading-relaxed">{streamingMessage}</p>
+              <p className="whitespace-pre-wrap leading-relaxed dark:text-black">{streamingMessage}</p>
               <span className="inline-block w-2 h-4 ml-1 animate-pulse" style={{ background: 'var(--dark-purple)' }}></span>
             </div>
           </div>
@@ -224,7 +224,7 @@ You should politely decline requests that are not related to English language le
           placeholder="Type your message here..."
           disabled={isLoading}
           rows={3}
-          className="flex-1 bg-white rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 disabled:bg-gray-100 resize-none shadow-sm"
+          className="flex-1 bg-white rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 disabled:bg-gray-100 resize-none shadow-sm dark:text-black"
           style={{ 
             border: '2px solid var(--medium-purple)',
             '--tw-ring-color': 'var(--dark-purple)'

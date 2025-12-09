@@ -41,8 +41,8 @@ const BottomNav = () => {
     const isActive = (path: string) => pathname === path;
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50 mx-10 my-5 rounded-[12px] max-w-[700px] mx-auto">
-            <div className="flex justify-around items-center h-16">
+        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 bg-white shadow-lg border-t border-gray-200 z-50 rounded-[12px] w-[calc(100%-1rem)] sm:w-[calc(100%-2rem)] max-w-[700px] my-2 sm:my-5">
+            <div className="flex justify-around items-center h-12 sm:h-16">
                 {navItems.map((item) => (
                     <button
                         key={item.id}

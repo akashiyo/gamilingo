@@ -11,6 +11,7 @@ export default function UserHeader() {
     const pathname = usePathname();
 
     const isHomeboard = pathname === "/homeboard";
+    const isGamePage = pathname.startsWith("/hangman") || pathname.startsWith("/memory") || pathname.startsWith("/flashcards");
 
     const { user, isAuthenticated, loading } = useUser();
 
@@ -18,14 +19,14 @@ export default function UserHeader() {
     if (!isAuthenticated || !user) return null;
 
     return (
-        <div className="user-header-container">
-            <div className="user-header-left">
+        <div className={`w-full bg-white p-4 sm:p-[17px_20px] shadow-sm max-w-[700px] mx-auto rounded-xl mt-2.5 flex items-center justify-between gap-2 ${isGamePage ? 'flex-wrap' : ''}`}>
+            <div className="flex flex-row items-center gap-2.5 order-1">
 
                 {/* BOUTON RETOUR */}
                 {!isHomeboard && (
                     <button
                         onClick={() => router.back()}
-                        className="back-button"
+                        className="bg-transparent border-none cursor-pointer p-1.5 rounded-full flex items-center justify-center text-[#333] hover:bg-black/8 active:bg-black/12 transition-colors"
                         aria-label="Go back"
                     >
                         <svg
@@ -49,14 +50,14 @@ export default function UserHeader() {
 
                 </div>
 
-                <span className="user-header-username">{user.username}</span>
+                <span className="text-sm font-semibold text-[#222]">{user.username}</span>
             </div>
 
-            <div className="user-header-center">
+            <div className={`flex items-center justify-center flex-1 order-2 ${isGamePage ? 'w-full sm:w-auto' : ''} ${!isGamePage ? 'hidden sm:flex' : ''}`}>
                 <XPBar />
             </div>
 
-            <div className="user-header-right">
+            <div className={`flex items-center gap-2.5 order-3 justify-center sm:justify-end ${isGamePage ? 'w-full sm:w-auto' : ''}`}>
                 <div className="level-box">
                     <img src="/fire.svg" alt="Fire" className="badge-icon" />
                     <p className="badge-text dark:text-black">Lv. {user.level}</p>
