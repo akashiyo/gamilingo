@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Flashcard from "./flashcard/flashcard";
 
-interface FlashcardsPageProps {
-  theme: string;         // "Foods", "Jobs", "Animals", "Family", "Emotions"
-  category: number;      // 1, 2, 3
-}
+export default function FlashcardsPage() {
+  const searchParams = useSearchParams();
+  const theme = searchParams.get("theme") || "Foods"; // fallback
 
-export default function FlashcardsPage({ theme, category }: FlashcardsPageProps) {
   const [knownCount, setKnownCount] = useState(0);
   const [unknownCount, setUnknownCount] = useState(0);
 
@@ -19,7 +18,7 @@ export default function FlashcardsPage({ theme, category }: FlashcardsPageProps)
 
   return (
     <div className="py-4 text-center mx-auto w-64">
-      <nav className="flex justify-between mb-4">
+      {/* <nav className="flex justify-between mb-4">
         <div>BackButton</div>
         <div className="flex flex-row gap-4">
           <div className="flex flex-row items-center gap-1">
@@ -31,15 +30,9 @@ export default function FlashcardsPage({ theme, category }: FlashcardsPageProps)
             <img src="/iconCheck.svg" className="h-5" />
           </div>
         </div>
-      </nav>
+      </nav> */}
 
-      {/* Pass theme and category as props */}
-      {/* <Flashcard
-        theme={theme}
-        categoryNumber={category}
-        onCountsChange={handleCountsUpdate}
-      /> */}
-      <Flashcard theme={"Foods"} categoryNumber={1} onCountsChange={handleCountsUpdate} />
+      <Flashcard theme={theme} onCountsChange={handleCountsUpdate} />
     </div>
   );
 }
