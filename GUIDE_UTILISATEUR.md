@@ -4,6 +4,10 @@
 
 Gamilingo est une application d'apprentissage de langues gamifiée qui vous permet d'apprendre du vocabulaire anglais-français à travers des jeux amusants tout en gagnant de l'expérience (XP) et en montant de niveau.
 
+compte de test : 
+    nom utilisateur : Vodka
+    mdp : vodka
+
 ---
 
 ## 📱 Fonctionnalités Principales

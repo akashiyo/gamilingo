@@ -18,7 +18,7 @@ export default function FlashcardsPage() {
 
   return (
     <div className="py-4 text-center mx-auto w-64">
-      {/* <nav className="flex justify-between mb-4">
+      <nav className="flex justify-between mb-4">
         <div>BackButton</div>
         <div className="flex flex-row gap-4">
           <div className="flex flex-row items-center gap-1">
@@ -30,7 +30,7 @@ export default function FlashcardsPage() {
             <img src="/iconCheck.svg" className="h-5" />
           </div>
         </div>
-      </nav> */}
+      </nav>
 
       <Flashcard theme={theme} onCountsChange={handleCountsUpdate} />
     </div>

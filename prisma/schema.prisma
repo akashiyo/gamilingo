@@ -8,30 +8,29 @@ datasource db {
 }
 
 model Word {
-  id         Int     @id @default(autoincrement())
+  id         Int              @id @default(autoincrement())
   en         String
   fr         String
-  category   Int     @default(1)
+  category   Int              @default(1)
   definition String?
   img        Bytes?
   theme      String?
-  wordStatus  UserWordStatus[]
+  wordStatus UserWordStatus[]
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  username String
-  pwd      String
-  level    Int    @default(1)
-  role     String
-  email    String
-  img      Bytes?
-  xp       Int    @default(0)
-  wordStatus UserWordStatus[]
-  userAwards UserAward[]
-
+  id         Int              @id @default(autoincrement())
+  name       String
+  username   String
+  pwd        String
+  level      Int              @default(1)
+  role       String
+  email      String
+  img        Bytes?
+  xp         Int              @default(0)
   avatar     Avatar?
+  userAwards UserAward[]
+  wordStatus UserWordStatus[]
 }
 
 model Dragon {
@@ -44,17 +43,15 @@ model UserWordStatus {
   userId    Int
   wordId    Int
   known     Boolean  @default(false)
-  wins      Int      @default(0)  // Number of games won mentioning this word (known=true at 3 wins)
+  wins      Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  user      User     @relation(fields: [userId], references: [id])
   word      Word     @relation(fields: [wordId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
-  @@unique([userId, wordId]) // Ensures one status per word per user
+  @@unique([userId, wordId])
 }
 
-// Records XP awards to users for completing a specific game / level / theme
 model UserAward {
   id        Int      @id @default(autoincrement())
   userId    Int
@@ -63,21 +60,19 @@ model UserAward {
   theme     String?
   xp        Int
   createdAt DateTime @default(now())
-
   user      User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, game, level, theme])
 }
 
 model Avatar {
-  id       Int    @id @default(autoincrement())
-  eyes     String
-  mouth    String
-  ears     String
-  hair     String
-  hat      String?
-  top      String
-
-  user     User   @relation(fields: [userId], references: [id])
-  userId   Int    @unique
+  id     Int     @id @default(autoincrement())
+  eyes   String
+  mouth  String
+  ears   String
+  hair   String
+  hat    String?
+  top    String
+  userId Int     @unique
+  user   User    @relation(fields: [userId], references: [id])
 }
