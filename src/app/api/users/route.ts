@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 //
 // GET all users

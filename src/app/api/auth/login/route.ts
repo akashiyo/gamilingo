@@ -1,10 +1,8 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
@@ -24,8 +22,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ msg: "User not found" }, { status: 404 });
     }
 
-     // Vérifie le mot de passe
-    const valid = user.pwd === pwd;
+     // Vérifie le mot de passe avec bcrypt
+    const valid = await bcrypt.compare(pwd, user.pwd);
 
     if (!valid) {
       return NextResponse.json({ msg: "Invalid credentials" }, { status: 401 });

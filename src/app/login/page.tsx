@@ -6,8 +6,8 @@ import { useUser } from "@/contexts/UserContext";
 export default function LoginPage() {
   const router = useRouter();
   const { setUser, refreshUser, isAuthenticated, loading } = useUser();
-  const [username, setUsername] = useState("deuxieme");
-  const [pwd, setPwd] = useState("test");
+  const [username, setUsername] = useState("");
+  const [pwd, setPwd] = useState("");
   const [error, setError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
