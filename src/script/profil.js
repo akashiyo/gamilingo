@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import "../app/profil/profil.css";
 import AvatarMini from "@/components/AvatarMini";
 import { useRouter } from "next/navigation";
-import AvatarMiniPreview from "@/components/AvatarMini";
 import { useUser } from "@/contexts/UserContext";
 
 
@@ -73,8 +72,8 @@ export default function Profil() {
         }
     }
 
-    if (loading) return <p>Chargement...</p>;
-    if (!user) return <p>Erreur : utilisateur introuvable.</p>;
+    if (loading) return <p className="chargement">Chargement...</p>;
+    if (!user) return <p className="chargement">Erreur : utilisateur introuvable.</p>;
 
     return (
         <section className="profile-container">
